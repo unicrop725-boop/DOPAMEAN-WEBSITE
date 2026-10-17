@@ -1,12 +1,15 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState, useState } from 'react';
 import { deleteAccountAction, type FormState } from '@/app/(storefront)/account/actions';
 
 export function DeleteAccountForm() {
   const [state, action, pending] = useActionState<FormState, FormData>(deleteAccountAction, {
     ok: false,
   });
+  // Controlled so a failed attempt (wrong password) does not wipe the confirmation: React resets form fields
+  // after every action. The password is deliberately cleared.
+  const [confirm, setConfirm] = useState('');
   return (
     <form className="sp-form sp-narrow" action={action} aria-label="Delete account">
       {state.message && (
@@ -27,7 +30,15 @@ export function DeleteAccountForm() {
       </div>
       <div className="sp-field">
         <label htmlFor="confirm">Type DELETE to confirm</label>
-        <input id="confirm" name="confirm" autoComplete="off" className="sp-input" required />
+        <input
+          id="confirm"
+          name="confirm"
+          autoComplete="off"
+          className="sp-input"
+          required
+          value={confirm}
+          onChange={(e) => setConfirm(e.target.value)}
+        />
       </div>
       <div className="sp-actions">
         <button className="sp-btn sp-btn--danger" type="submit" disabled={pending}>

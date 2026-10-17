@@ -13,8 +13,13 @@ const THIRTY_DAYS = 60 * 60 * 24 * 30;
  */
 export async function readCartOwner(): Promise<CartOwner | null> {
   const user = await getSessionUser();
-  if (user) return { customerId: user.id };
   const token = (await cookies()).get(CART_COOKIE)?.value;
+  if (user) {
+    // A guest who just signed in keeps their bag. The merge is database-only and idempotent (the guest cart
+    // is deleted by it); the stale cookie is cleared by the next route handler or action (ensureCartOwner).
+    if (token) await mergeAnonymousCart(getDb(), token, user.id);
+    return { customerId: user.id };
+  }
   return token ? { anonToken: token } : null;
 }
 

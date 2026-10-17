@@ -31,17 +31,17 @@ test.describe('storefront pages load and behave', () => {
     expect(errors).toEqual([]);
   });
 
-  test('home: the shopping bag drawer opens and closes', async ({ page }) => {
+  test('home: BAG[n] opens the full-page bag (the drawer was replaced by /cart)', async ({
+    page,
+  }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     const errors = watch(page);
     await page.goto('/');
     await page.waitForLoadState('networkidle');
-    const bag = page.locator('.shopping-bag-container');
-    await expect(bag).not.toHaveClass(/is-visible/);
-    await page.locator('#open-bag-link').click();
-    await expect(bag).toHaveClass(/is-visible/);
-    await page.locator('#close-bag-btn').click();
-    await expect(bag).not.toHaveClass(/is-visible/);
+    await expect(page.locator('.shopping-bag-container')).toHaveCount(0);
+    await page.locator('.nav-box-user-links a', { hasText: /^BAG\[\d+\]$/ }).click();
+    await expect(page).toHaveURL(/\/cart$/);
+    await expect(page.getByRole('heading', { name: /SHOPPING BAG/ })).toBeVisible();
     expect(errors).toEqual([]);
   });
 

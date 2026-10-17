@@ -12,6 +12,8 @@ export function PageShell({ children }: { children: React.ReactNode }) {
     <>
       <link rel="stylesheet" href="/css/collection_page.css" precedence="storefront" />
       <link rel="stylesheet" href="/css/collection_page_responsive.css" precedence="storefront" />
+      <link rel="stylesheet" href="/css/sharp-corners.css" precedence="storefront" />
+      <link rel="stylesheet" href="/css/side-icons.css" precedence="storefront" />
       <a className="sp-skip" href="#main">
         Skip to content
       </a>

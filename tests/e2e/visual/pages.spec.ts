@@ -1,4 +1,4 @@
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import type { Server } from 'node:http';
 import { join } from 'node:path';
 import { expect, test } from '@playwright/test';
@@ -14,6 +14,11 @@ import { WIDTHS, shoot } from './shots';
  * Differences are written to test-results/visual-diff for inspection.
  */
 const LEGACY_PORT = 4173;
+// Owner-approved changes (2026-10-17): sharp corners and small icons on the side menu, search and contact boxes. It is applied to the
+// original page here so that everything else is still compared strictly.
+const SHARP_CORNERS = ['sharp-corners.css', 'side-icons.css']
+  .map((f) => readFileSync(join('public', 'css', f), 'utf8'))
+  .join(' ');
 const MAX_DIFF_RATIO = Number(process.env.VISUAL_MAX_DIFF_RATIO ?? 0.0005); // 0.05% of pixels
 
 type PageCase = {
@@ -71,7 +76,13 @@ test.describe('ported pages look identical to the original static pages', () => 
         const b = await browser.newPage();
         try {
           const original = PNG.sync.read(
-            await shoot(a, `http://127.0.0.1:${LEGACY_PORT}/${p.legacy}`, width, p.mask),
+            await shoot(
+              a,
+              `http://127.0.0.1:${LEGACY_PORT}/${p.legacy}`,
+              width,
+              p.mask,
+              SHARP_CORNERS,
+            ),
           );
           const ported = PNG.sync.read(
             await shoot(b, `http://localhost:${E2E_PORT}${p.app}`, width, p.mask),

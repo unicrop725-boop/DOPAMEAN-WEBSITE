@@ -18,6 +18,7 @@ All variables are validated at startup by `src/lib/env.ts` (Zod). `.env.example`
 | `SMTP_SECURE`                    | no       | `false`                 | `true` for implicit TLS                                            |
 | `MAIL_FROM`                      | yes      |                         | From header                                                        |
 | `RAZORPAY_KEY_ID`, `_KEY_SECRET` | no       |                         | Razorpay **test** keys (not used until Phase 3; none supplied yet) |
+| `RAZORPAY_API_BASE`              | no       |                         | Test-only override of the Razorpay API URL (fake server)           |
 | `RAZORPAY_WEBHOOK_SECRET`        | no       |                         | Webhook signature secret                                           |
 | `RESERVATION_TTL_MINUTES`        | no       | `15`                    | Stock reservation lifetime (INV-10)                                |
 | `ORDER_PAYMENT_DEADLINE_MINUTES` | no       | `60`                    | When an unpaid order is cancelled (SPEC §4.5)                      |

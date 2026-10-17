@@ -1,6 +1,7 @@
 import Script from 'next/script';
 import type { Metadata } from 'next';
 import { getDb } from '@/db/client';
+import { listActiveBanners } from '@/lib/banners';
 import { listCollectionTiles, listProducts, parseListingQuery } from '@/modules/catalog';
 import { HomeMarkup } from '@/storefront/home';
 
@@ -14,18 +15,32 @@ export const metadata: Metadata = {
 export default async function HomePage() {
   const db = getDb();
   const query = parseListingQuery({ pageSize: '10' }, { defaultSort: 'newest' });
-  const [latest, collections] = await Promise.all([
+  const [latest, collections, slides, promoSlides] = await Promise.all([
     listProducts(db, { kind: 'all' }, query),
     listCollectionTiles(db, 2),
+    listActiveBanners(db, 'hero'),
+    listActiveBanners(db, 'promo'),
   ]);
   return (
     <>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap"
+        precedence="storefront"
+      />
       <link rel="stylesheet" href="/css/style.css" precedence="storefront" />
       <link rel="stylesheet" href="/css/responsive.css" precedence="storefront" />
+      <link rel="stylesheet" href="/css/sharp-corners.css" precedence="storefront" />
+      <link rel="stylesheet" href="/css/hero-slider.css" precedence="storefront" />
+      <link rel="stylesheet" href="/css/side-icons.css" precedence="storefront" />
+      <link rel="stylesheet" href="/css/home-cards.css" precedence="storefront" />
+      <link rel="stylesheet" href="/css/home-videos.css" precedence="storefront" />
       <HomeMarkup
         newArrivals={latest.items.slice(0, 4)}
         gridProducts={latest.items.slice(4, 10)}
         collections={collections}
+        slides={slides}
+        promoSlides={promoSlides}
       />
       <Script src="/js/storefront.js" strategy="afterInteractive" />
     </>

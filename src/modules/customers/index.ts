@@ -185,3 +185,6 @@ export async function anonymizeCustomer(db: Db, userId: string): Promise<void> {
       .where(eq(customerProfile.userId, userId));
   });
 }
+
+export { listCustomersAdmin, getCustomerAdmin } from './admin';
+export type { AdminCustomerFilter } from './admin';

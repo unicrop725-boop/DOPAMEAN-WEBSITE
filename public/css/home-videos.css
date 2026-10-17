@@ -1,0 +1,43 @@
+/* The two big tiles on the home page play a looping, silent video instead of a still picture
+   (owner request, 2026-10-17). No play/pause button or other YouTube controls are shown: the picture stays in
+   place until the video is really playing (and for a moment after, while YouTube hides its own buttons), then the
+   video fades in. Visitors who ask for reduced motion only see the picture. Loaded after the original
+   stylesheets (ADR 0004). */
+.collection-image-wrapper {
+  position: relative;
+}
+.collection-image-wrapper > a {
+  display: block;
+  height: 100%;
+}
+.collection-video {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none; /* clicks go through to the link, and YouTube never shows hover controls */
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  filter: brightness(80%); /* same dimming as the pictures */
+  container-type: size;
+}
+.collection-video.is-playing {
+  opacity: 1;
+}
+/* Cover the tile like object-fit: cover does for pictures: the 16:9 player is always bigger than the tile in both
+   directions and centred, so a portrait tile shows the middle of the picture. It is made 18% bigger than needed so
+   the title bar of the player, which sits at its top edge, falls outside the tile. */
+.collection-video iframe {
+  --h: max(118cqh, 118cqw * 9 / 16);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: var(--h);
+  width: calc(var(--h) * 16 / 9);
+  transform: translate(-50%, -50%);
+  border: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .collection-video {
+    display: none;
+  }
+}

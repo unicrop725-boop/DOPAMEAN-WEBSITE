@@ -1,0 +1,211 @@
+/* Home page hero slider (slides are uploaded in Admin > Banners). Only loaded on the home page.
+   The slides fill the same box as the original hero picture; the original text classes
+   (banner-text-content, banner-headline ...) are reused so the text looks exactly like the original. */
+.main-banner,
+.main-banner-mobile-background {
+  position: relative;
+}
+.hero-slider {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 1;
+}
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.9s ease,
+    visibility 0.9s;
+}
+.hero-slide.is-active {
+  opacity: 1;
+  visibility: visible;
+}
+.hero-slide-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+.hero-slide-link {
+  position: absolute;
+  inset: 0;
+}
+/* A soft dark fade under the text so it stays readable on bright photos. */
+.hero-slide:has(.banner-text-content)::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0) 55%);
+}
+/* Same position and look as the original text block, over the slide. */
+.hero-slide .banner-text-content {
+  /* The original theme pins this block to the window (position: fixed), so it floated over the rest of the
+     page, footer included. Inside a slide it is placed in the slide instead and scrolls away with the hero.
+     Same spot as before: 55% from the left, 5% from the bottom. */
+  position: absolute;
+  z-index: 2;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.45);
+}
+.hero-slide .banner-subheadline {
+  font-size: clamp(11px, 0.9vw, 15px);
+  opacity: 0.92;
+}
+.hero-slide.is-active .banner-headline,
+.hero-slide.is-active .banner-subheadline,
+.hero-slide.is-active .banner-cta-link {
+  animation: hero-rise 0.7s ease-out both;
+}
+.hero-slide.is-active .banner-subheadline {
+  animation-delay: 0.1s;
+}
+.hero-slide.is-active .banner-cta-link {
+  animation-delay: 0.2s;
+}
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.hero-arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 3;
+  width: 44px;
+  height: 44px;
+  margin-top: -22px;
+  border: 1px solid #000;
+  border-radius: 0;
+  background: #fff;
+  color: #000;
+  font: 18px/1 'Apercu Mono Pro', ui-monospace, 'Courier New', monospace;
+  cursor: pointer;
+}
+.hero-arrow:hover,
+.hero-arrow:focus-visible {
+  background: #000;
+  color: #fff;
+}
+.hero-arrow--prev {
+  /* clear of the fixed side menu on desktop (it is hidden on small screens) */
+  left: calc(11vw + 14px);
+}
+.hero-arrow--next {
+  right: 14px;
+}
+.hero-dots {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  z-index: 3;
+  display: flex;
+  gap: 8px;
+  transform: translateX(-50%);
+}
+.hero-dot {
+  width: 28px;
+  height: 8px;
+  padding: 0;
+  border: 1px solid #fff;
+  border-radius: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.hero-dot.is-active {
+  background: #fff;
+}
+.hero-arrow:focus-visible,
+.hero-dot:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-slide {
+    transition: none;
+  }
+  .hero-slide.is-active .banner-headline,
+  .hero-slide.is-active .banner-subheadline,
+  .hero-slide.is-active .banner-cta-link {
+    animation: none;
+  }
+}
+/* Strip under the free-shipping bar: same slider, but in the page flow with its own height. */
+.promo-slider {
+  margin-top: 10px;
+}
+.hero-slider--inline {
+  position: relative;
+  inset: auto;
+  aspect-ratio: 16 / 6;
+  border: 1px solid #000;
+  background: #fff;
+}
+.hero-slider--inline .hero-arrow--prev {
+  left: 14px; /* the side menu is not beside this strip */
+}
+/* Pictures here are often pale, so the dots are black instead of white. */
+.hero-slider--inline .hero-dot {
+  border-color: #000;
+}
+.hero-slider--inline .hero-dot.is-active {
+  background: #000;
+}
+.hero-slider--inline .hero-dot:focus-visible {
+  outline-color: #000;
+}
+@media (max-width: 767px) {
+  .hero-slider--inline {
+    aspect-ratio: 4 / 3;
+  }
+}
+@media (max-width: 1023px) {
+  .hero-arrow--prev {
+    left: 14px;
+  }
+}
+@media (max-width: 768px) {
+  .hero-arrow {
+    width: 36px;
+    height: 36px;
+    margin-top: -18px;
+  }
+}
+
+/* Slider at the top of Shop all and the collection pages, framed like the product grid below it: grey page
+   colour with a small gap round the picture, thin black lines at the left and bottom. The height is set
+   directly (not with aspect-ratio + max-height, which would also narrow the width). */
+.shop-slider {
+  background: #ececec;
+  padding: 5px;
+  border-left: 1px solid #000;
+  border-bottom: 1px solid #000;
+}
+.shop-slider .hero-slider--inline {
+  aspect-ratio: auto;
+  width: 100%;
+  height: min(22vw, 400px);
+  max-height: none;
+  border: 0;
+  background: transparent;
+}
+@media (max-width: 767px) {
+  .shop-slider .hero-slider--inline {
+    height: 52vw;
+  }
+}
+/* In a short wide banner, keep the upper part of the picture (faces) rather than the exact centre. */
+.shop-slider .hero-slide-img {
+  object-position: center 30%;
+}

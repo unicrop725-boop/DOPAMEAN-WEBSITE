@@ -12,7 +12,7 @@ const csp = [
   "font-src 'self' data: https://fonts.gstatic.com",
   "media-src 'self'",
   "connect-src 'self' https://*.razorpay.com",
-  'frame-src https://api.razorpay.com https://checkout.razorpay.com',
+  'frame-src https://api.razorpay.com https://checkout.razorpay.com https://www.youtube-nocookie.com',
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",

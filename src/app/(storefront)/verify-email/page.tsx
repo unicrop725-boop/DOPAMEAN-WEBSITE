@@ -11,7 +11,7 @@ export default async function VerifyEmailPage({ searchParams }: Props) {
   const { error } = await searchParams;
   return (
     <PageShell>
-      <div className="sp-narrow">
+      <div className="sp-narrow sp-auth">
         <PageTitle>VERIFY YOUR EMAIL</PageTitle>
         {error && (
           <p role="alert" className="sp-message sp-message--error">

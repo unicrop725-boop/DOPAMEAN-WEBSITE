@@ -12,7 +12,7 @@ export default async function RegisterPage() {
   if (await getSessionUser()) redirect('/account');
   return (
     <PageShell>
-      <div className="sp-narrow">
+      <div className="sp-narrow sp-auth">
         <PageTitle>CREATE ACCOUNT</PageTitle>
         <RegisterForm />
         <p className="sp-text" style={{ marginTop: 18 }}>

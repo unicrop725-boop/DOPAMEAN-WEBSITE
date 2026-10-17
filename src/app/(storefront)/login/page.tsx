@@ -18,7 +18,7 @@ export default async function LoginPage({ searchParams }: Props) {
 
   return (
     <PageShell>
-      <div className="sp-narrow">
+      <div className="sp-narrow sp-auth">
         <PageTitle>SIGN IN</PageTitle>
         {sp.reset === '1' && (
           <p role="status" className="sp-message sp-message--success">

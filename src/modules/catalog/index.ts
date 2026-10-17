@@ -118,3 +118,29 @@ export async function addProductMedia(
 ): Promise<void> {
   await tx.insert(productMedia).values({ productId, ...media });
 }
+
+export * from './admin';
+export {
+  processImageUpload,
+  s3StorageFromEnv,
+  newMediaKey,
+  isManagedMediaKey,
+  SERVABLE_MEDIA_KEY,
+} from './media';
+export type { ObjectStorage, ProcessedImage } from './media';
+export {
+  MAX_UPLOAD_BYTES,
+  MAX_IMAGE_EDGE_PX,
+  sniffImage,
+  validateUpload,
+  findEmbeddedMarkup,
+} from './domain/image';
+export type { ImageKind, UploadVerdict } from './domain/image';
+export type {
+  CategoryInput,
+  CollectionInput,
+  CreateProductAdminInput,
+  NewVariantInput,
+  ProductFieldsInput,
+  VariantFieldsInput,
+} from './domain/admin-input';

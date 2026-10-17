@@ -140,7 +140,14 @@ export async function mergeAnonymousCart(
   customerId: string,
 ): Promise<void> {
   await db.transaction(async (tx) => {
-    const anon = await findCart(tx, { anonToken });
+    // Lock the guest cart first: two requests merging at once (the page and the bag-count call) must not both
+    // add its lines. The second one waits, then finds the cart already gone and does nothing.
+    const [anon] = await tx
+      .select()
+      .from(cart)
+      .where(ownerWhere({ anonToken }))
+      .limit(1)
+      .for('update');
     if (!anon) return;
     const lines = await tx.select().from(cartLine).where(eq(cartLine.cartId, anon.id));
     if (lines.length > 0) {

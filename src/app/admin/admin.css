@@ -27,9 +27,17 @@
   --color-muted: var(--color-muted);
   --color-success: var(--color-success);
   --color-danger: var(--color-danger);
+  --color-muted-text: var(--color-muted-text);
+  --color-warning: var(--color-warning);
+  --color-success-text: #166534;
+  --color-danger-bg: #fdf0ee;
+  --color-success-bg: #effaf3;
+  --color-warning-bg: #fdf6e7;
+  --color-warning-text: #7a4f00;
   --font-sans: var(--font-body);
   --font-mono: var(--font-mono);
   --radius-sm: var(--radius-sm);
+  --shadow-pop: 0 4px 16px rgba(0, 0, 0, 0.12);
 }
 
 body {
@@ -42,4 +50,87 @@ body {
 :focus-visible {
   outline: 2px solid var(--color-ink);
   outline-offset: 2px;
+}
+
+/* Dense, table-first admin building blocks (used by many screens, so named once here). */
+@layer components {
+  .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-sm);
+    background: var(--color-paper);
+  }
+  .admin-table caption {
+    text-align: left;
+  }
+  .admin-table th {
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    font-weight: 400;
+    vertical-align: top;
+  }
+  .admin-table thead th {
+    border-bottom: 1px solid var(--color-line-strong);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--color-muted-text);
+    white-space: nowrap;
+  }
+  .admin-table tbody th {
+    border-bottom: 1px solid var(--color-line);
+    color: var(--color-ink);
+  }
+  .admin-table td {
+    border-bottom: 1px solid var(--color-line);
+    padding: 0.5rem 0.75rem;
+    vertical-align: top;
+  }
+  .admin-table tbody tr:hover {
+    background: var(--color-panel-alt);
+  }
+  .admin-table .num,
+  .admin-table thead th.num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    font-family: var(--font-mono);
+  }
+  .admin-card {
+    border: 1px solid var(--color-line);
+    background: var(--color-paper);
+    padding: 1rem;
+  }
+  .admin-h2 {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.5rem;
+  }
+  .admin-link {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .admin-link:hover {
+    background: var(--color-panel);
+  }
+}
+
+.sr-only-focusable:not(:focus):not(:focus-within) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

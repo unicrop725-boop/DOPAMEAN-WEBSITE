@@ -67,6 +67,9 @@ export default async function ProductPage({ params }: Props) {
       <link rel="stylesheet" href="/css/products.css" precedence="storefront" />
       <link rel="stylesheet" href="/css/product_responsive.css" precedence="storefront" />
       <link rel="stylesheet" href="/css/storefront-additions.css" precedence="storefront" />
+      <link rel="stylesheet" href="/css/sharp-corners.css" precedence="storefront" />
+      <link rel="stylesheet" href="/css/side-icons.css" precedence="storefront" />
+      <link rel="stylesheet" href="/css/product-card.css" precedence="storefront" />
       <ProductMarkup product={product} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ld }} />
       <Script src="/js/storefront.js" strategy="afterInteractive" />

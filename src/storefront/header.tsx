@@ -50,11 +50,11 @@ export function SiteHeader() {
           </div>{' '}
           <div className="nav-box-light">
             {' '}
-            <div className="nav-box-header-1">{'SEARCH[....]'}</div>{' '}
+            <div className="nav-box-header-1">{'SEARCH'}</div>{' '}
             <hr className="divider-line-dark" />{' '}
             <div className="nav-box-user-links">
               {' '}
-              <a href="/account">{'ACCOUNT'}</a> <a href="#">{'BAG[0]'}</a>{' '}
+              <a href="/account">{'ACCOUNT'}</a> <a href="/cart">{'BAG[0]'}</a>{' '}
             </div>{' '}
           </div>{' '}
         </div>{' '}

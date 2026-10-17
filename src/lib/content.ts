@@ -30,6 +30,12 @@ export async function upsertContentPage(
 export const contactInput = z.object({
   name: z.string().trim().min(2, 'Enter your name').max(120),
   email: z.string().trim().toLowerCase().email('Enter a valid email address').max(254),
+  subject: z
+    .string()
+    .trim()
+    .max(150, 'At most 150 characters')
+    .optional()
+    .transform((v) => (v ? v : null)),
   message: z.string().trim().min(10, 'Write at least a few words').max(2000),
 });
 export type ContactInput = z.infer<typeof contactInput>;
@@ -52,8 +58,10 @@ export async function saveContactMessage(
   if (inbox) {
     await enqueueEmail(db, {
       to: inbox,
-      subject: `New contact message from ${input.name}`,
-      text: `From: ${input.name} <${input.email}>\n\n${input.message}`,
+      subject: input.subject
+        ? `Contact: ${input.subject} (${input.name})`
+        : `New contact message from ${input.name}`,
+      text: `From: ${input.name} <${input.email}>\n${input.subject ? `Subject: ${input.subject}\n` : ''}\n${input.message}`,
     });
   }
   return row.id;

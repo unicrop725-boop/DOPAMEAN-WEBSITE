@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: 'Reset password | DOPAMEAN' };
 export default function ForgotPasswordPage() {
   return (
     <PageShell>
-      <div className="sp-narrow">
+      <div className="sp-narrow sp-auth">
         <PageTitle>RESET PASSWORD</PageTitle>
         <p className="sp-text">
           Enter your email and we will send you a link to choose a new password.

@@ -40,6 +40,12 @@ export function appEnv(): NodeJS.ProcessEnv {
     SMTP_PORT: process.env.SMTP_PORT ?? '1025',
     MAIL_FROM: 'DOPAMEAN <no-reply@localhost>',
     LOG_LEVEL: process.env.E2E_LOG_LEVEL ?? 'warn',
+    // Online payments run against the local fake Razorpay server (tests/e2e/fake-razorpay.ts).
+    RAZORPAY_KEY_ID: 'rzp_test_e2e_key',
+    RAZORPAY_KEY_SECRET: 'e2e_key_secret_value',
+    RAZORPAY_WEBHOOK_SECRET: 'e2e_webhook_secret_value',
+    RAZORPAY_API_BASE: `http://127.0.0.1:${process.env.FAKE_RZP_PORT ?? 4010}/v1`,
+    CONTACT_INBOX: 'staff-inbox@example.test',
     NODE_ENV: 'production',
   };
 }

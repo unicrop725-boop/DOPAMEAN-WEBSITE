@@ -1,0 +1,37 @@
+/* Product cards on Shop all, collection and search pages: a compact name and price bar with big text
+   (owner request, 2026-10-17). Same sizing as the home page cards (home-cards.css).
+   Loaded after the original stylesheets (ADR 0004). */
+.product-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* names that wrap to two lines do not shift the neighbouring card's text */
+  gap: 3px;
+  min-height: 0;
+  padding: 10px max(18px, 1.5vw) 9px;
+  line-height: 1.2;
+}
+.product-info .product-name,
+.product-info .product-price {
+  margin: 0;
+}
+.product-info .product-name {
+  font-size: clamp(14px, 1.2vw, 18px);
+  letter-spacing: 0.02em;
+}
+.product-info .product-price {
+  font-size: clamp(12px, 1vw, 15px);
+}
+/* Two cards per row on phones, so the text is a little smaller there. */
+@media (max-width: 767px) {
+  .product-info {
+    min-height: 0;
+    padding: 8px 12px;
+    gap: 2px;
+  }
+  .product-info .product-name {
+    font-size: 13px;
+  }
+  .product-info .product-price {
+    font-size: 12px;
+  }
+}

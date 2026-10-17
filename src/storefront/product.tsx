@@ -36,7 +36,7 @@ export function ProductMarkup({ product }: { product: ProductDetail }) {
           <div className="nav-section search-container">{' [SEARCH FOR....] '}</div>{' '}
           <div className="nav-section controls-container">
             {' '}
-            <a href="#" className="bag-link">
+            <a href="/cart" className="bag-link">
               {'BAG[0]'}
             </a>{' '}
             <div className="hamburger-menu">
@@ -226,11 +226,11 @@ export function ProductMarkup({ product }: { product: ProductDetail }) {
             </div>{' '}
             <div className="nav-box-light">
               {' '}
-              <div className="nav-box-header-1">{'SEARCH[....]'}</div>{' '}
+              <div className="nav-box-header-1">{'SEARCH'}</div>{' '}
               <hr className="divider-line-dark" />{' '}
               <div className="nav-box-user-links">
                 {' '}
-                <a href="/account">{'ACCOUNT'}</a> <a href="#">{'BAG[0]'}</a>{' '}
+                <a href="/account">{'ACCOUNT'}</a> <a href="/cart">{'BAG[0]'}</a>{' '}
               </div>{' '}
             </div>{' '}
           </div>{' '}
@@ -589,7 +589,7 @@ export function ProductMarkup({ product }: { product: ProductDetail }) {
               {' '}
               <div className="dpm-contact-widget">
                 {' '}
-                <div className="dpm-contact-widget-title">{'CONTACT US [..]'}</div>{' '}
+                <div className="dpm-contact-widget-title">{'CONTACT US'}</div>{' '}
                 <hr className="dpm-widget-divider" />{' '}
                 <div className="dpm-contact-widget-links">
                   {' '}

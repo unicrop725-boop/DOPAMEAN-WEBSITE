@@ -1,4 +1,4 @@
-import { and, desc, eq } from 'drizzle-orm';
+import { and, desc, eq, gte, ilike, lt, sql, type SQL } from 'drizzle-orm';
 import type { DbOrTx } from '@/db/client';
 import { auditEvent } from './schema';
 
@@ -35,6 +35,69 @@ export async function recordAudit(tx: DbOrTx, input: AuditInput): Promise<void> 
     ip: input.actor.ip ?? null,
     userAgent: input.actor.userAgent ?? null,
   });
+}
+
+export type AuditSearch = {
+  entity?: string;
+  entityId?: string;
+  actorUserId?: string;
+  /** Matches the start of the action name, so "order." finds every order action. */
+  action?: string;
+  from?: Date;
+  /** Exclusive upper bound. */
+  to?: Date;
+  page?: number;
+  pageSize?: number;
+};
+
+export type AuditRow = typeof auditEvent.$inferSelect;
+
+/** Filtered, paginated audit search (page size capped at 100). Read-only: the table is append-only. */
+export async function searchAudit(db: DbOrTx, f: AuditSearch = {}) {
+  const pageSize = Math.min(Math.max(f.pageSize ?? 50, 1), 100);
+  const page = Math.max(f.page ?? 1, 1);
+  const conds: SQL[] = [];
+  if (f.entity) conds.push(eq(auditEvent.entity, f.entity));
+  if (f.entityId) conds.push(eq(auditEvent.entityId, f.entityId));
+  if (f.actorUserId) conds.push(eq(auditEvent.actorUserId, f.actorUserId));
+  if (f.action) {
+    conds.push(ilike(auditEvent.action, `${f.action.replace(/[%_\\]/g, '\\$&')}%`));
+  }
+  if (f.from) conds.push(gte(auditEvent.at, f.from));
+  if (f.to) conds.push(lt(auditEvent.at, f.to));
+  const where = conds.length ? and(...conds) : undefined;
+  const [items, [total]] = await Promise.all([
+    db
+      .select()
+      .from(auditEvent)
+      .where(where)
+      .orderBy(desc(auditEvent.at), desc(auditEvent.id))
+      .limit(pageSize)
+      .offset((page - 1) * pageSize),
+    db
+      .select({ n: sql<number>`count(*)::int` })
+      .from(auditEvent)
+      .where(where),
+  ]);
+  const count = total?.n ?? 0;
+  return {
+    items,
+    total: count,
+    page,
+    pageSize,
+    pageCount: Math.max(1, Math.ceil(count / pageSize)),
+  };
+}
+
+/** Distinct entity types and actions seen so far, for filter pickers. */
+export async function auditFilterOptions(
+  db: DbOrTx,
+): Promise<{ entities: string[]; actions: string[] }> {
+  const [entities, actions] = await Promise.all([
+    db.selectDistinct({ v: auditEvent.entity }).from(auditEvent).orderBy(auditEvent.entity),
+    db.selectDistinct({ v: auditEvent.action }).from(auditEvent).orderBy(auditEvent.action),
+  ]);
+  return { entities: entities.map((r) => r.v), actions: actions.map((r) => r.v) };
 }
 
 export async function listAudit(

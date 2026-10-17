@@ -1,8 +1,11 @@
 import { spawn, spawnSync, type ChildProcess } from 'node:child_process';
 import { Pool } from 'pg';
+import type { Server } from 'node:http';
 import { E2E_DB, E2E_PORT, OWNER, PG_ADMIN_URL, appEnv } from './env';
+import { startFakeRazorpay } from './fake-razorpay';
 
 const children: ChildProcess[] = [];
+let fakeProvider: Server | undefined;
 
 function run(cmd: string, args: string[], env: NodeJS.ProcessEnv) {
   const r = spawnSync(cmd, args, { env, stdio: 'inherit', shell: process.platform === 'win32' });
@@ -35,6 +38,7 @@ export default async function globalSetup() {
   await admin.end();
 
   const env = appEnv();
+  fakeProvider = await startFakeRazorpay();
   run('npx', ['tsx', 'scripts/migrate.ts'], env);
   run('npx', ['tsx', 'scripts/seed.ts'], env);
   // Test-only: rows that reproduce the original pages' content for the visual-parity suite.
@@ -64,10 +68,12 @@ export default async function globalSetup() {
     await waitFor(`http://localhost:${E2E_PORT}/api/health`);
   } catch (err) {
     for (const c of children) c.kill();
+    fakeProvider?.close();
     throw err;
   }
 
   return async () => {
     for (const c of children) c.kill();
+    fakeProvider?.close();
   };
 }

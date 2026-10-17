@@ -4,6 +4,7 @@
 import { count } from 'drizzle-orm';
 import sharp from 'sharp';
 import { closeDb, getDb } from '../src/db/client';
+import { DEFAULT_APPAREL_RULE, createTaxRule } from '../src/modules/tax';
 import { product } from '../src/db/schema';
 import { ensureDefaultContentPages } from '../src/lib/content';
 import {
@@ -67,6 +68,8 @@ async function main() {
   }
 
   await db.transaction(async (tx) => {
+    // Apparel GST slab: 5% up to Rs 2,500 per unit, 18% above. UNCONFIRMED: the accountant must verify it.
+    const taxRuleId = await createTaxRule(tx, DEFAULT_APPAREL_RULE);
     const productIds: string[] = [];
     let i = 0;
     for (const group of CATALOG) {
@@ -81,6 +84,7 @@ async function main() {
           status: 'published',
           categoryId,
           hsnCode: '6205',
+          taxRuleId,
           materials: 'Sample materials text.',
           careGuide: 'Sample care guide text.',
           shippingReturns: 'Sample shipping and returns text.',

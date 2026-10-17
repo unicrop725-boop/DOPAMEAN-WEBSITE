@@ -125,26 +125,28 @@
       if (plain) el.textContent = plain;
     });
   }
+  // The desktop (.size-selector) and mobile (.size-btn) pickers are two views of one choice: picking a
+  // size in either marks the same variant in both, so "add to bag" always uses what the shopper chose.
   var selectorButtons = document.querySelectorAll('.size-selector button');
+  var sizeBtns = document.querySelectorAll('.size-btn');
+  function chooseVariant(button) {
+    var id = button.getAttribute('data-variant-id');
+    selectorButtons.forEach(function (b) {
+      b.classList.toggle('active', b.getAttribute('data-variant-id') === id);
+    });
+    sizeBtns.forEach(function (b) {
+      b.classList.toggle('selected', b.getAttribute('data-variant-id') === id);
+    });
+    applyVariant(button);
+  }
   selectorButtons.forEach(function (button) {
     button.addEventListener('click', function () {
-      if (button.disabled) return;
-      selectorButtons.forEach(function (b) {
-        b.classList.remove('active');
-      });
-      button.classList.add('active');
-      applyVariant(button);
+      if (!button.disabled) chooseVariant(button);
     });
   });
-  var sizeBtns = document.querySelectorAll('.size-btn');
   sizeBtns.forEach(function (button) {
     button.addEventListener('click', function () {
-      if (button.disabled) return;
-      sizeBtns.forEach(function (b) {
-        b.classList.remove('selected');
-      });
-      button.classList.add('selected');
-      applyVariant(button);
+      if (!button.disabled) chooseVariant(button);
     });
   });
 
@@ -189,37 +191,6 @@
     modal.addEventListener('click', function (e) {
       if (e.target === modal) closeModal();
     });
-  }
-
-  // ---- Shopping bag drawer (home page) -----------------------------------------------------
-  var bag = document.querySelector('.shopping-bag-container');
-  var openBag = document.getElementById('open-bag-link');
-  var closeBag = document.getElementById('close-bag-btn');
-  if (bag && openBag && closeBag) {
-    // The original markup has no .overlay element, so the drawer could never open. Create it.
-    var overlay = document.querySelector('.overlay');
-    if (!overlay) {
-      overlay = document.createElement('div');
-      overlay.className = 'overlay';
-      document.body.appendChild(overlay);
-    }
-    var show = function () {
-      bag.classList.add('is-visible');
-      overlay.classList.add('is-visible');
-    };
-    var hide = function () {
-      bag.classList.remove('is-visible');
-      overlay.classList.remove('is-visible');
-    };
-    openBag.addEventListener('click', function (e) {
-      e.preventDefault();
-      show();
-    });
-    closeBag.addEventListener('click', function (e) {
-      e.preventDefault();
-      hide();
-    });
-    overlay.addEventListener('click', hide);
   }
 
   // ---- Product page: sticky dock on mobile -------------------------------------------------
@@ -293,6 +264,11 @@
   style.textContent =
     'html.dpm-dark{filter:invert(1) hue-rotate(180deg);background:#000}' +
     'html.dpm-dark img,html.dpm-dark video,html.dpm-dark .mobile-image,html.dpm-dark .product-image{filter:invert(1) hue-rotate(180deg)}' +
+    '.header-btn-3{display:inline-flex;align-items:center;gap:.7em}' +
+    '.header-btn-3::after{content:"";flex:none;width:30px;height:16px;border-radius:8px;border:1px solid #000;box-sizing:border-box;background-color:#fff;background-image:radial-gradient(circle,#000 0 5px,transparent 5.5px);background-repeat:no-repeat;background-size:14px 14px;background-position:1px center;transition:background-position .25s ease,background-color .25s ease}' +
+    '.header-btn-3[aria-checked="true"]::after{background-color:#000;background-image:radial-gradient(circle,#fff 0 5px,transparent 5.5px);background-position:calc(100% - 1px) center}' +
+    '.header-btn-3:focus-visible{outline:2px solid #000;outline-offset:-3px}' +
+    '@media (prefers-reduced-motion:reduce){.header-btn-3::after{transition:none}}' +
     '.sp-mobile-menu{display:none;flex-direction:column;background:#000;color:#fff;border-top:1px solid #fff;font-family:"Apercu Mono Pro",monospace;text-transform:uppercase;font-size:.8rem}' +
     '.sp-mobile-menu.is-open{display:flex}' +
     '.sp-mobile-menu a{padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.2);color:#fff}';
@@ -309,6 +285,12 @@
     document.documentElement.classList.toggle('dpm-dark', dark);
     var circle = document.querySelector('.toggle-circle');
     if (circle) circle.style.transform = dark ? 'translateX(16px)' : '';
+    // The desktop button is a switch: say so to assistive technology and show its state.
+    var desktopSwitch = document.querySelector('.header-btn-3');
+    if (desktopSwitch) {
+      desktopSwitch.setAttribute('role', 'switch');
+      desktopSwitch.setAttribute('aria-checked', String(dark));
+    }
   }
   applyTheme(readTheme() === 'dark');
   function toggleTheme() {
@@ -370,18 +352,100 @@
   document.querySelectorAll('[data-panel]').forEach(function (trigger) {
     var panel = document.getElementById(trigger.getAttribute('data-panel'));
     if (!panel) return;
-    var toggle = function () {
-      var open = panel.classList.toggle('is-open');
+    var setOpen = function (open) {
+      panel.classList.toggle('is-open', open);
       trigger.setAttribute('aria-expanded', String(open));
     };
-    trigger.addEventListener('click', toggle);
+    var toggle = function () {
+      setOpen(!panel.classList.contains('is-open'));
+    };
+    // The SORTED BY dropdown also opens while a mouse hovers over it and closes when the mouse leaves.
+    var drop = trigger.closest('.sp-dropdown');
+    var canHover = !!drop && window.matchMedia('(hover: hover)').matches;
+    if (canHover) {
+      drop.addEventListener('mouseenter', function () {
+        setOpen(true);
+      });
+      drop.addEventListener('mouseleave', function () {
+        // Do not close the FILTER form under someone who is typing in it.
+        if (!panel.contains(document.activeElement) || document.activeElement.tagName === 'A') {
+          setOpen(false);
+        }
+      });
+    }
+    if (drop) {
+      // A click anywhere else closes it (also closes a form that was kept open for typing).
+      document.addEventListener('click', function (e) {
+        if (!drop.contains(e.target)) setOpen(false);
+      });
+    }
+    // With a mouse the hover has already opened it, so a click keeps it open instead of closing it again.
+    trigger.addEventListener('click', canHover ? function () { setOpen(true); } : toggle);
     trigger.addEventListener('keydown', function (e) {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         toggle();
       }
     });
+    if (drop) {
+      drop.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+          setOpen(false);
+          trigger.focus();
+        }
+      });
+    }
   });
+
+  // ---- Home page tile videos: show the video only once it is really playing ------------------------
+  // The YouTube player is asked to report its state (enablejsapi=1). While it loads, and for the first moments
+  // of playback (when YouTube shows its own buttons), the tile keeps showing its still picture.
+  var tileVideos = document.querySelectorAll('.collection-video');
+  if (tileVideos.length) {
+    var revealTimers = [];
+    tileVideos.forEach(function (box, i) {
+      var frame = box.querySelector('iframe');
+      var hello = function () {
+        try {
+          frame.contentWindow.postMessage(
+            JSON.stringify({ event: 'listening', id: i + 1, channel: 'widget' }),
+            '*',
+          );
+        } catch (err) {
+          /* the picture simply stays */
+        }
+      };
+      frame.addEventListener('load', hello);
+      // the player may need to be asked again once its own scripts are ready
+      window.setTimeout(hello, 1500);
+      window.setTimeout(hello, 4000);
+    });
+    window.addEventListener('message', function (e) {
+      if (!/^https:\/\/www\.youtube(-nocookie)?\.com$/.test(e.origin)) return;
+      var data;
+      try {
+        data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+      } catch (err) {
+        return;
+      }
+      if (!data) return;
+      var state;
+      if (data.event === 'onStateChange') state = data.info;
+      else if (data.event === 'infoDelivery' && data.info) state = data.info.playerState;
+      if (state === undefined) return;
+      tileVideos.forEach(function (box, i) {
+        var frame = box.querySelector('iframe');
+        if (!frame || frame.contentWindow !== e.source) return;
+        // Once shown, the video stays shown (the brief buffering at each loop restart must not flash the picture).
+        if (box.classList.contains('is-playing') || revealTimers[i]) return;
+        if (state === 1) {
+          revealTimers[i] = window.setTimeout(function () {
+            box.classList.add('is-playing');
+          }, 3500);
+        }
+      });
+    });
+  }
 
   // ---- Footer newsletter / wishlist sign-up --------------------------------------------------
   var newsForm = document.querySelector('.dpm-newsletter-form');
@@ -423,4 +487,125 @@
         });
     });
   }
+
+  // ---- Bag: BAG[n] label, links to the /cart page, add to bag -------------------------------
+  function setBagCount(n) {
+    document.querySelectorAll('a, span').forEach(function (el) {
+      if (el.children.length === 0 && /^BAG\[\d+\]$/.test(el.textContent.trim())) {
+        el.textContent = 'BAG[' + n + ']';
+      }
+    });
+  }
+  fetch('/api/cart/count', { headers: { accept: 'application/json' } })
+    .then(function (r) {
+      return r.json();
+    })
+    .then(function (j) {
+      if (j && j.ok) setBagCount(j.count);
+    })
+    .catch(function () {
+      /* the label simply keeps its default */
+    });
+  document.querySelectorAll('.bag-link').forEach(function (el) {
+    if (el.tagName !== 'A')
+      makeLink(el, 'Shopping bag', function () {
+        go('/cart');
+      });
+  });
+
+  var toast = null;
+  var toastTimer = 0;
+  function showToast(text, withLink) {
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.setAttribute('role', 'status');
+      toast.style.cssText =
+        'position:fixed;left:50%;top:48px;transform:translateX(-50%);z-index:5000;background:#000;color:#fff;' +
+        'padding:16px 22px;font:15px "Apercu Mono Pro",monospace;text-transform:uppercase;max-width:90vw;border:1px solid #fff;' +
+        'box-shadow:0 10px 30px rgba(0,0,0,0.25)';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = text + ' ';
+    if (withLink) {
+      var a = document.createElement('a');
+      a.href = '/cart';
+      a.textContent = '[VIEW BAG]';
+      a.style.cssText = 'color:#fff;text-decoration:underline;margin-left:8px';
+      toast.appendChild(a);
+    }
+    toast.style.display = 'block';
+    window.clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(function () {
+      toast.style.display = 'none';
+    }, 5000);
+  }
+
+  var ERRORS = {
+    QTY_EXCEEDS_AVAILABLE: 'Not enough stock for that quantity',
+    OUT_OF_STOCK: 'That size is sold out',
+    PRODUCT_UNAVAILABLE: 'That item is no longer available',
+    RATE_LIMITED: 'Too many requests, please wait a moment',
+  };
+  // The button text changes while adding ("ADDING..." then "ADDED") so the click is clearly seen.
+  var addLabels = document.querySelectorAll('.add-to-cart-bar > span:first-child, .add-to-bag-btn-text');
+  var addLabelText = [];
+  addLabels.forEach(function (el, i) {
+    addLabelText[i] = el.textContent;
+  });
+  var addTimer = 0;
+  var adding = false;
+  function setAddLabel(text) {
+    addLabels.forEach(function (el, i) {
+      el.textContent = text === null ? addLabelText[i] : text;
+    });
+  }
+  function addToBag() {
+    if (adding) return;
+    var chosen =
+      document.querySelector('.size-btn.selected:not(:disabled)') ||
+      document.querySelector('.size-selector button.active:not(:disabled)');
+    var id = chosen && chosen.getAttribute('data-variant-id');
+    if (!id) {
+      showToast('Choose an available size first', false);
+      return;
+    }
+    adding = true;
+    window.clearTimeout(addTimer);
+    setAddLabel('ADDING...');
+    fetch('/api/cart/items', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', accept: 'application/json' },
+      body: JSON.stringify({ variantId: id, qty: 1 }),
+    })
+      .then(function (r) {
+        return r.json();
+      })
+      .then(function (j) {
+        if (j.ok) {
+          setBagCount(j.count);
+          setAddLabel('ADDED ✓');
+          showToast('Added to bag', true);
+          addTimer = window.setTimeout(function () {
+            setAddLabel(null);
+          }, 2200);
+        } else {
+          setAddLabel(null);
+          showToast(ERRORS[j.code] || 'Could not add to bag', false);
+        }
+      })
+      .catch(function () {
+        setAddLabel(null);
+        showToast('Could not reach the server', false);
+      })
+      .then(function () {
+        adding = false;
+      });
+  }
+  document.querySelectorAll('.add-to-bag-btn').forEach(function (b) {
+    b.addEventListener('click', addToBag);
+  });
+  document.querySelectorAll('.add-to-cart-bar').forEach(function (b) {
+    makeLink(b, 'Add to bag', addToBag);
+    b.setAttribute('role', 'button');
+  });
 })();

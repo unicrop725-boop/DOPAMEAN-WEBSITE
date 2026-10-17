@@ -322,3 +322,5 @@ export async function countOrdersByStatus(db: DbOrTx): Promise<Record<OrderStatu
   for (const r of rows) out[r.status] = r.n;
   return out;
 }
+
+export * from './reports';

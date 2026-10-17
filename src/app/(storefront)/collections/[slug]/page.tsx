@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { getDb } from '@/db/client';
+import { listActiveBanners } from '@/lib/banners';
 import {
   getFilterOptions,
   listProducts,
@@ -22,7 +23,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: resolved ? `${resolved.title} | DOPAMEAN` : 'Not found',
     alternates: { canonical: `/collections/${slug}` },
-    icons: { icon: '/assets/Group 4.png' },
   };
 }
 
@@ -32,9 +32,11 @@ export default async function CollectionPage({ params, searchParams }: Props) {
   const resolved = await resolveListing(db, slug);
   if (!resolved) notFound();
   const query = parseListingQuery(await searchParams, { defaultSort: resolved.defaultSort });
-  const [listing, options] = await Promise.all([
+  const [listing, options, banners, slides] = await Promise.all([
     listProducts(db, resolved.scope, query),
     getFilterOptions(db, resolved.scope),
+    listActiveBanners(db),
+    listActiveBanners(db, 'shop'),
   ]);
   return (
     <ListingView
@@ -43,6 +45,8 @@ export default async function CollectionPage({ params, searchParams }: Props) {
       listing={listing}
       query={query}
       options={options}
+      banners={banners}
+      slides={slides}
       emptyMessage={
         query.sizes.length ||
         query.minPaise !== undefined ||

@@ -10,6 +10,8 @@ export type ContactState = {
   ok: boolean;
   message?: string;
   fieldErrors?: Record<string, string>;
+  /** What the visitor typed, so the form can show it again (React resets forms after an action). */
+  values?: Record<string, string>;
 };
 
 function clientIp(h: Headers): string | null {
@@ -17,10 +19,15 @@ function clientIp(h: Headers): string | null {
   return fwd || h.get('x-real-ip') || null;
 }
 
-export async function sendContactAction(
-  _prev: ContactState,
-  form: FormData,
-): Promise<ContactState> {
+export async function sendContactAction(prev: ContactState, form: FormData): Promise<ContactState> {
+  const result = await sendContact(prev, form);
+  if (result.ok) return result;
+  const values: Record<string, string> = {};
+  for (const k of ['name', 'email', 'subject', 'message']) values[k] = String(form.get(k) ?? '');
+  return { ...result, values };
+}
+
+async function sendContact(_prev: ContactState, form: FormData): Promise<ContactState> {
   // Honeypot: real visitors never see or fill this field. Pretend success so bots learn nothing.
   if (String(form.get('website') ?? '') !== '') return { ok: true };
 
@@ -36,6 +43,7 @@ export async function sendContactAction(
     const input = contactInput.parse({
       name: form.get('name'),
       email: form.get('email'),
+      subject: String(form.get('subject') ?? ''),
       message: form.get('message'),
     });
     await db.transaction((tx) =>

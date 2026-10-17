@@ -1,0 +1,1 @@
+ALTER TABLE "contact_message" ADD COLUMN "subject" text;

@@ -1,0 +1,32 @@
+/* Desktop product page: taller rows in the info card (owner request, 2026-10-17).
+   Only heights and padding change; fonts, borders and colours stay as in products.css.
+   Loaded after the original stylesheets (ADR 0004). */
+.product-header,
+.add-to-cart-bar {
+  height: 56px;
+  padding: 0 16px;
+}
+.add-to-cart-bar {
+  height: 60px;
+}
+.product-intro {
+  padding: 14px 16px;
+  line-height: 20px;
+}
+.accordion-header {
+  height: 52px;
+  padding: 0 16px;
+}
+.accordion-content ul {
+  padding: 2px 34px 16px;
+}
+.accordion-content p {
+  padding-bottom: 14px !important; /* the markup sets an inline 10px */
+}
+.model-info-container {
+  height: 56px;
+  padding: 0 16px;
+}
+.size-selector button {
+  height: 52px;
+}

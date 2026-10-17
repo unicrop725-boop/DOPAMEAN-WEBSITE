@@ -144,6 +144,18 @@ describe('merging the guest cart on sign-in', () => {
     expect(await getCartLines(t.db, { customerId: 'cust2' })).toEqual([{ variantId: v, qty: 2 }]);
   });
 
+  it('merging at the same moment from several requests adds the guest lines exactly once', async () => {
+    await t.db.insert(user).values({ id: 'cust3', name: 'E', email: 'e@example.test' });
+    const guest = anon();
+    const v = id();
+    await addToCart(t.db, guest, v, 1);
+    // The page render and the bag-count call both merge when a guest signs in; they race.
+    await Promise.all(
+      Array.from({ length: 6 }, () => mergeAnonymousCart(t.db, guest.anonToken, 'cust3')),
+    );
+    expect(await getCartLines(t.db, { customerId: 'cust3' })).toEqual([{ variantId: v, qty: 1 }]);
+  });
+
   it('merging with no guest cart does nothing', async () => {
     await expect(mergeAnonymousCart(t.db, newAnonToken(), 'cust')).resolves.toBeUndefined();
   });

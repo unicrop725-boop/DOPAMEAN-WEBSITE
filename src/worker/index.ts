@@ -3,6 +3,14 @@ import { closeDb, getDb } from '@/db/client';
 import { getEnv } from '@/lib/env';
 import { baseLogger } from '@/lib/logger';
 import { relayOutbox } from '@/lib/outbox';
+import { buildCheckoutDeps } from '@/lib/checkout-deps-core';
+import {
+  cancelUnpaidOrdersJob,
+  expireReservationsJob,
+  reconcilePendingPayments,
+  retryStuckRefundsJob,
+  type CheckoutDeps,
+} from '@/modules/checkout';
 import { mailerFromEnv, notificationHandlers } from '@/modules/notifications';
 import { housekeeping, writeHeartbeat } from './jobs';
 
@@ -28,6 +36,32 @@ async function main() {
     const result = await housekeeping(db);
     log.info(result, 'housekeeping done');
   });
+
+  // Commerce jobs (SPEC sections 4.5 and 7): release expired stock holds, cancel unpaid orders after their deadline,
+  // reconcile payments stuck in pending, retry refunds that never got an answer.
+  const commerceJobs: {
+    name: string;
+    cron: string;
+    run: (deps: CheckoutDeps) => Promise<unknown>;
+  }[] = [
+    { name: 'expire-reservations', cron: '* * * * *', run: expireReservationsJob },
+    { name: 'cancel-unpaid-orders', cron: '*/5 * * * *', run: cancelUnpaidOrdersJob },
+    { name: 'reconcile-payments', cron: '*/10 * * * *', run: reconcilePendingPayments },
+    { name: 'retry-refunds', cron: '*/5 * * * *', run: retryStuckRefundsJob },
+  ];
+  for (const job of commerceJobs) {
+    await boss.createQueue(job.name);
+    await boss.schedule(job.name, job.cron);
+    await boss.work(job.name, async () => {
+      try {
+        const result = await job.run(await buildCheckoutDeps());
+        log.info({ job: job.name, result }, 'job done');
+      } catch (err) {
+        log.error({ err, job: job.name }, 'job failed');
+        throw err;
+      }
+    });
+  }
 
   // The outbox relay polls Postgres directly (pg-boss cron granularity is one minute).
   let stopping = false;

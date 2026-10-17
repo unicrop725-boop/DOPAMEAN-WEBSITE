@@ -26,7 +26,7 @@ export default async function ContentPage({ params }: Props) {
   const blocks = parseContent(page.body);
   return (
     <PageShell>
-      <div className="sp-medium sp-prose">
+      <div className={slug === 'contact' ? 'sp-medium sp-prose sp-contact' : 'sp-medium sp-prose'}>
         <PageTitle>{page.title.toUpperCase()}</PageTitle>
         {blocks.map((b, i) =>
           b.type === 'h2' ? (

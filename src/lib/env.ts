@@ -30,6 +30,8 @@ const schema = z.object({
   RAZORPAY_KEY_ID: z.string().optional(),
   RAZORPAY_KEY_SECRET: z.string().optional(),
   RAZORPAY_WEBHOOK_SECRET: z.string().optional(),
+  /** Test-only override of Razorpay's API URL (a local fake server). Leave unset in real use. */
+  RAZORPAY_API_BASE: emptyToUndefined(z.url().optional()),
   RESERVATION_TTL_MINUTES: z.coerce.number().int().min(1).default(15),
   ORDER_PAYMENT_DEADLINE_MINUTES: z.coerce.number().int().min(1).default(60),
   SENTRY_DSN: z.string().optional(),

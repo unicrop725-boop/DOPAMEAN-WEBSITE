@@ -1,0 +1,207 @@
+/* Small animated icons in the side menu, search/account/bag box and contact box (owner request, 2026-10-17).
+   Pure CSS: each icon is a ::before drawn from an inline SVG mask, so it takes the text colour (white on the
+   black boxes, black on the white box, and follows dark mode). No markup changes. Motion is switched off for
+   visitors who ask for reduced motion. Loaded after each page's original stylesheets (ADR 0004). */
+.nav-box-links a::before,
+.nav-box-header-1::before,
+.nav-box-user-links a::before,
+.dpm-contact-widget-title::before,
+.dpm-contact-widget-links a::before {
+  content: '';
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin-right: 0.5em;
+  vertical-align: -0.2em;
+  background-color: currentColor;
+  -webkit-mask: var(--ic) center / contain no-repeat;
+  mask: var(--ic) center / contain no-repeat;
+  transform-origin: 50% 60%;
+  animation: ic-in 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.dpm-contact-widget-links a,
+.nav-box-links a,
+.nav-box-user-links a {
+  cursor: pointer;
+}
+.nav-box-links a,
+.nav-box-header-1,
+.nav-box-user-links a,
+.dpm-contact-widget-title,
+.dpm-contact-widget-links a {
+  white-space: nowrap;
+}
+
+.nav-box-links a:nth-of-type(1)::before {
+  --ic: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Crect x=%223%22 y=%223%22 width=%227%22 height=%227%22/%3E%3Crect x=%2214%22 y=%223%22 width=%227%22 height=%227%22/%3E%3Crect x=%223%22 y=%2214%22 width=%227%22 height=%227%22/%3E%3Crect x=%2214%22 y=%2214%22 width=%227%22 height=%227%22/%3E%3C/svg%3E");
+}
+.nav-box-links a:nth-of-type(2)::before {
+  --ic: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M8 3 3 6l2 4 3-1v12h8V9l3 1 2-4-5-3a4 4 0 0 1-8 0z%22/%3E%3C/svg%3E");
+}
+.nav-box-links a:nth-of-type(3)::before {
+  --ic: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M12 7a2 2 0 1 0-2-2%22/%3E%3Cpath d=%22M12 7v2l9 6a1.5 1.5 0 0 1-1 2.7H4a1.5 1.5 0 0 1-1-2.7l9-6%22/%3E%3C/svg%3E");
+}
+.nav-box-links a:nth-of-type(4)::before {
+  --ic: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M7 3h10l1 18h-5l-1-12-1 12H6z%22/%3E%3C/svg%3E");
+}
+.nav-box-links a:nth-of-type(5)::before {
+  --ic: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z%22/%3E%3Cpath d=%22M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z%22/%3E%3C/svg%3E");
+}
+.nav-box-header-1::before {
+  --ic: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Ccircle cx=%2211%22 cy=%2211%22 r=%227%22/%3E%3Cpath d=%22m20 20-4-4%22/%3E%3C/svg%3E");
+}
+.nav-box-user-links a[href="/account"]::before {
+  --ic: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Ccircle cx=%2212%22 cy=%228%22 r=%224%22/%3E%3Cpath d=%22M4 21a8 8 0 0 1 16 0%22/%3E%3C/svg%3E");
+}
+.nav-box-user-links a[href="/cart"]::before {
+  --ic: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M5 8h14l-1 13H6z%22/%3E%3Cpath d=%22M9 8V6a3 3 0 0 1 6 0v2%22/%3E%3C/svg%3E");
+}
+.dpm-contact-widget-title::before {
+  --ic: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M4 5h16v11H9l-5 4z%22/%3E%3C/svg%3E");
+}
+.dpm-contact-widget-links p:nth-child(1) a::before {
+  --ic: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Crect x=%223%22 y=%223%22 width=%2218%22 height=%2218%22 rx=%225%22/%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%224%22/%3E%3Ccircle cx=%2217.5%22 cy=%226.5%22 r=%22.6%22/%3E%3C/svg%3E");
+}
+.dpm-contact-widget-links p:nth-child(2) a::before {
+  --ic: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Crect x=%222.5%22 y=%225.5%22 width=%2219%22 height=%2213%22 rx=%224%22/%3E%3Cpath d=%22m10 9 5 3-5 3z%22/%3E%3C/svg%3E");
+}
+/* Add to cart (desktop bar) and Add to bag (mobile button) on the product page: a bag with a plus. */
+.add-to-cart-bar > span:first-child,
+.add-to-bag-btn-text {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+.add-to-cart-bar > span:first-child::before,
+.add-to-bag-btn-text::before {
+  content: '';
+  display: inline-block;
+  flex: none;
+  width: 1.25em;
+  height: 1.25em;
+  margin-right: 0.6em;
+  background-color: currentColor;
+  -webkit-mask: var(--ic-cart) center / contain no-repeat;
+  mask: var(--ic-cart) center / contain no-repeat;
+  transform-origin: 50% 60%;
+  animation: ic-in 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+  --ic-cart: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M5 8h14l-1 13H6z%22/%3E%3Cpath d=%22M9 8V6a3 3 0 0 1 6 0v2%22/%3E%3Cpath d=%22M12 12.5v5M9.5 15h5%22/%3E%3C/svg%3E");
+}
+.add-to-cart-bar:hover > span:first-child::before,
+.add-to-bag-btn:hover .add-to-bag-btn-text::before,
+.add-to-bag-btn:focus-visible .add-to-bag-btn-text::before {
+  animation: ic-bounce 0.7s ease-in-out both;
+}
+.nav-box-links a:nth-of-type(1)::before { animation-delay: 0.05s; }
+.nav-box-links a:nth-of-type(2)::before { animation-delay: 0.10s; }
+.nav-box-links a:nth-of-type(3)::before { animation-delay: 0.15s; }
+.nav-box-links a:nth-of-type(4)::before { animation-delay: 0.20s; }
+.nav-box-links a:nth-of-type(5)::before { animation-delay: 0.25s; }
+.nav-box-header-1::before { animation-delay: 0.1s; }
+.nav-box-user-links a:nth-of-type(1)::before { animation-delay: 0.15s; }
+.nav-box-user-links a:nth-of-type(2)::before { animation-delay: 0.2s; }
+.dpm-contact-widget-title::before { animation-delay: 0.1s; }
+.dpm-contact-widget-links p:nth-child(1) a::before { animation-delay: 0.15s; }
+.dpm-contact-widget-links p:nth-child(2) a::before { animation-delay: 0.2s; }
+.nav-box-links a:nth-of-type(5)::before {
+  animation: ic-in 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.25s both, ic-twinkle 2.6s ease-in-out 1.2s infinite;
+}
+.nav-box-links a:nth-of-type(1):hover::before,
+.nav-box-links a:nth-of-type(1):focus-visible::before {
+  animation: ic-pulse 0.7s ease-in-out both;
+}
+.nav-box-links a:nth-of-type(2):hover::before,
+.nav-box-links a:nth-of-type(2):focus-visible::before {
+  animation: ic-wiggle 0.7s ease-in-out both;
+}
+.nav-box-links a:nth-of-type(3):hover::before,
+.nav-box-links a:nth-of-type(3):focus-visible::before {
+  animation: ic-swing 0.7s ease-in-out both;
+}
+.nav-box-links a:nth-of-type(4):hover::before,
+.nav-box-links a:nth-of-type(4):focus-visible::before {
+  animation: ic-sway 0.7s ease-in-out both;
+}
+.nav-box-links a:nth-of-type(5):hover::before,
+.nav-box-links a:nth-of-type(5):focus-visible::before {
+  animation: ic-spin 0.7s ease-in-out both;
+}
+.nav-box-header-1:hover::before {
+  animation: ic-swing 0.7s ease-in-out both;
+}
+.nav-box-user-links a[href="/account"]:hover::before,
+.nav-box-user-links a[href="/account"]:focus-visible::before {
+  animation: ic-pop 0.7s ease-in-out both;
+}
+.nav-box-user-links a[href="/cart"]:hover::before,
+.nav-box-user-links a[href="/cart"]:focus-visible::before {
+  animation: ic-bounce 0.7s ease-in-out both;
+}
+.dpm-contact-widget-title:hover::before {
+  animation: ic-wiggle 0.7s ease-in-out both;
+}
+.dpm-contact-widget-links p:nth-child(1) a:hover::before,
+.dpm-contact-widget-links p:nth-child(1) a:focus-visible::before {
+  animation: ic-pulse 0.7s ease-in-out both;
+}
+.dpm-contact-widget-links p:nth-child(2) a:hover::before,
+.dpm-contact-widget-links p:nth-child(2) a:focus-visible::before {
+  animation: ic-pulse 0.7s ease-in-out both;
+}
+
+@keyframes ic-in {
+  from { opacity: 0; transform: scale(0) rotate(-90deg); }
+  to { opacity: 1; transform: scale(1) rotate(0); }
+}
+@keyframes ic-pulse {
+  0%, 100% { transform: scale(1); }
+  45% { transform: scale(1.35); }
+}
+@keyframes ic-wiggle {
+  0%, 100% { transform: rotate(0); }
+  20% { transform: rotate(-16deg); }
+  40% { transform: rotate(14deg); }
+  60% { transform: rotate(-9deg); }
+  80% { transform: rotate(5deg); }
+}
+@keyframes ic-swing {
+  0%, 100% { transform: rotate(0) translateY(0); }
+  30% { transform: rotate(-22deg) translateY(-1px); }
+  65% { transform: rotate(16deg); }
+}
+@keyframes ic-sway {
+  0%, 100% { transform: translateX(0) rotate(0); }
+  30% { transform: translateX(-2px) rotate(-8deg); }
+  70% { transform: translateX(2px) rotate(8deg); }
+}
+@keyframes ic-spin {
+  from { transform: rotate(0) scale(1); }
+  50% { transform: rotate(180deg) scale(1.25); }
+  to { transform: rotate(360deg) scale(1); }
+}
+@keyframes ic-pop {
+  0%, 100% { transform: scale(1); }
+  35% { transform: scale(1.3) translateY(-2px); }
+  60% { transform: scale(0.92); }
+}
+@keyframes ic-bounce {
+  0%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-4px); }
+  55% { transform: translateY(0); }
+  75% { transform: translateY(-2px); }
+}
+@keyframes ic-twinkle {
+  0%, 100% { transform: scale(1) rotate(0); opacity: 1; }
+  50% { transform: scale(1.18) rotate(20deg); opacity: 0.75; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav-box-links a::before,
+  .nav-box-header-1::before,
+  .nav-box-user-links a::before,
+  .dpm-contact-widget-title::before,
+  .dpm-contact-widget-links a::before,
+  .add-to-cart-bar > span:first-child::before,
+  .add-to-bag-btn-text::before {
+    animation: none !important;
+  }
+}

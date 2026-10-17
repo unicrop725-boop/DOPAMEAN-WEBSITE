@@ -10,7 +10,6 @@ type Props = { searchParams: Promise<Record<string, string | string[] | undefine
 export const metadata: Metadata = {
   title: 'Search | DOPAMEAN',
   robots: { index: false, follow: true },
-  icons: { icon: '/assets/Group 4.png' },
 };
 
 export default async function SearchPage({ searchParams }: Props) {

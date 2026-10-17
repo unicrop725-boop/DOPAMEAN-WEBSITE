@@ -1,0 +1,127 @@
+/* Home page product cards: a compact name and price bar with big text (owner request, 2026-10-17).
+   The bar used to be a fixed 12% of the card, which left the text tiny. Now the bar sizes to its text and the
+   picture takes the rest of the card. Loaded after the original stylesheets (ADR 0004). */
+.product-card,
+.item-card {
+  overflow: hidden;
+}
+.product-card img,
+.item-card img {
+  flex: 1 1 auto;
+  height: auto;
+  min-height: 0;
+}
+.product-price-info,
+.item-info {
+  flex: none;
+  height: auto;
+  min-height: 0;
+  padding: 9px max(18px, 1.5vw);
+  gap: 3px;
+  background: #ececec;
+}
+.product-card-name,
+.item-name {
+  margin: 0;
+  font-size: clamp(14px, 1.2vw, 18px);
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+}
+.product-card-price,
+.item-price {
+  font-size: clamp(12px, 1vw, 15px);
+  line-height: 1.2;
+}
+@media (max-width: 767px) {
+  .product-price-info,
+  .item-info {
+    min-height: 0;
+    padding: 8px 18px;
+  }
+  .product-card-name,
+  .item-name {
+    font-size: 15px;
+  }
+  .product-card-price,
+  .item-price {
+    font-size: 13px;
+  }
+}
+
+/* Band above the collection tiles: big text scrolling in an endless loop, like the strip at the very top of the
+   site. The area behind the tiles is black (it shows as the lines between them), so the band has its own
+   page-grey background, a black line along its top, and another along its bottom. The whole band links to
+   Shop all. The text pauses while the pointer is over it. */
+.section-main-content {
+  min-width: 0; /* a flex item may not grow to the width of the scrolling text inside it */
+}
+.collection-marquee {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  contain: inline-size;
+  overflow: hidden;
+  background: #ececec;
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+  color: #000;
+  text-decoration: none;
+}
+.collection-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: collection-marquee-scroll 55s linear infinite;
+}
+.collection-marquee:hover .collection-marquee-track,
+.collection-marquee:focus-visible .collection-marquee-track {
+  animation-play-state: paused;
+}
+.collection-marquee-group {
+  display: flex;
+  flex: none;
+  align-items: center;
+}
+.collection-marquee-group span {
+  padding: 30px 0;
+  font-family: 'Apercu Mono Pro', ui-monospace, monospace;
+  font-size: clamp(24px, 2.8vw, 46px);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.collection-marquee-group span::after {
+  content: '\2726'; /* a small four-pointed star between phrases */
+  display: inline-block;
+  margin: 0 clamp(28px, 3.4vw, 64px);
+  font-size: 0.6em;
+  vertical-align: 0.15em;
+}
+.collection-marquee:focus-visible {
+  outline: 2px solid #000;
+  outline-offset: -4px;
+}
+@keyframes collection-marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%); /* the track holds two identical copies, so this joins up seamlessly */
+  }
+}
+@media (max-width: 767px) {
+  .collection-marquee-group span {
+    padding: 20px 0;
+    font-size: 20px;
+  }
+  .collection-marquee-track {
+    animation-duration: 40s;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .collection-marquee-track {
+    animation: none;
+  }
+  .collection-marquee-group + .collection-marquee-group {
+    display: none;
+  }
+}

@@ -11,8 +11,10 @@ import {
   type ProductCard,
   type SortKey,
 } from '@/modules/catalog';
+import type { StorefrontBanner } from '@/lib/banners';
 import { Money, formatBracketPrice } from '@/modules/pricing';
 import { SiteFooter } from './footer';
+import { HeroSlider } from './hero-slider';
 import { SiteHeader } from './header';
 
 const COLUMNS = 4;
@@ -67,6 +69,25 @@ function Showcase({ row }: { row: ProductCard[] }) {
   );
 }
 
+/** An uploaded banner between two rows of products: full width, same black hairline frame as the grid. */
+function BannerStrip({ banner }: { banner: StorefrontBanner }) {
+  const img = (
+    <img
+      className="sp-ad-banner-img"
+      src={banner.imageUrl}
+      alt={banner.alt}
+      width={banner.width}
+      height={banner.height}
+      loading="lazy"
+    />
+  );
+  return (
+    <aside className="sp-ad-banner" aria-label="Promotion">
+      {banner.linkUrl ? <a href={banner.linkUrl}>{img}</a> : img}
+    </aside>
+  );
+}
+
 function chunk<T>(items: T[], size: number): T[][] {
   const out: T[][] = [];
   for (let i = 0; i < items.length; i += size) out.push(items.slice(i, i + size));
@@ -87,98 +108,102 @@ function FilterBar({
   return (
     <>
       <div className="filter-bar">
-        <span
-          role="button"
-          tabIndex={0}
-          aria-expanded="false"
-          aria-controls="filter-panel"
-          data-panel="filter-panel"
-        >
-          FILTER
-        </span>
-        <span
-          role="button"
-          tabIndex={0}
-          aria-expanded="false"
-          aria-controls="sort-panel"
-          data-panel="sort-panel"
-        >
-          SORTED BY
-        </span>
-      </div>
-      <div className="sp-panel" id="filter-panel">
-        <form method="get" action={basePath} aria-label="Filter products">
-          {query.q && <input type="hidden" name="q" value={query.q} />}
-          <input type="hidden" name="sort" value={query.sort} />
-          {options.sizes.length > 0 && (
-            <fieldset className="sp-field" style={{ border: 0, padding: 0, margin: 0 }}>
-              <legend className="sp-label">Size</legend>
-              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-                {options.sizes.map((s) => (
-                  <label key={s} style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
-                    <input
-                      type="checkbox"
-                      name="size"
-                      value={s}
-                      defaultChecked={query.sizes.includes(s)}
-                    />{' '}
-                    {s}
-                  </label>
-                ))}
-              </div>
-            </fieldset>
-          )}
-          <div className="sp-field">
-            <label htmlFor="min">Min price (RS.)</label>
-            <input
-              id="min"
-              name="min"
-              type="number"
-              min="0"
-              inputMode="numeric"
-              className="sp-input"
-              defaultValue={query.minPaise !== undefined ? query.minPaise / 100 : ''}
-            />
-          </div>
-          <div className="sp-field">
-            <label htmlFor="max">Max price (RS.)</label>
-            <input
-              id="max"
-              name="max"
-              type="number"
-              min="0"
-              inputMode="numeric"
-              className="sp-input"
-              defaultValue={query.maxPaise !== undefined ? query.maxPaise / 100 : ''}
-            />
-          </div>
-          <label style={{ display: 'flex', gap: 6, alignItems: 'center', height: 40 }}>
-            <input type="checkbox" name="stock" value="1" defaultChecked={query.inStock} /> In stock
-            only
-          </label>
-          <button className="sp-btn" type="submit">
-            Apply
-          </button>
-          <a
-            className="sp-btn sp-btn--outline"
-            href={query.q ? `${basePath}?q=${encodeURIComponent(query.q)}` : basePath}
+        <div className="sp-dropdown sp-dropdown--left">
+          <span
+            role="button"
+            tabIndex={0}
+            aria-expanded="false"
+            aria-controls="filter-panel"
+            data-panel="filter-panel"
           >
-            Clear
-          </a>
-        </form>
-      </div>
-      <div className="sp-panel" id="sort-panel">
-        <nav className="sp-sort-list" aria-label="Sort products">
-          {sortOptions.map((s) => (
-            <a
-              key={s}
-              href={`${basePath}${listingQueryString(query, { sort: s, page: 1 })}`}
-              aria-current={s === query.sort ? 'true' : undefined}
-            >
-              {SORT_LABELS[s]}
-            </a>
-          ))}
-        </nav>
+            FILTER
+          </span>
+          <div className="sp-panel" id="filter-panel">
+            <form method="get" action={basePath} aria-label="Filter products">
+              {query.q && <input type="hidden" name="q" value={query.q} />}
+              <input type="hidden" name="sort" value={query.sort} />
+              {options.sizes.length > 0 && (
+                <fieldset className="sp-field" style={{ border: 0, padding: 0, margin: 0 }}>
+                  <legend className="sp-label">Size</legend>
+                  <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+                    {options.sizes.map((s) => (
+                      <label key={s} style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
+                        <input
+                          type="checkbox"
+                          name="size"
+                          value={s}
+                          defaultChecked={query.sizes.includes(s)}
+                        />{' '}
+                        {s}
+                      </label>
+                    ))}
+                  </div>
+                </fieldset>
+              )}
+              <div className="sp-field">
+                <label htmlFor="min">Min price (RS.)</label>
+                <input
+                  id="min"
+                  name="min"
+                  type="number"
+                  min="0"
+                  inputMode="numeric"
+                  className="sp-input"
+                  defaultValue={query.minPaise !== undefined ? query.minPaise / 100 : ''}
+                />
+              </div>
+              <div className="sp-field">
+                <label htmlFor="max">Max price (RS.)</label>
+                <input
+                  id="max"
+                  name="max"
+                  type="number"
+                  min="0"
+                  inputMode="numeric"
+                  className="sp-input"
+                  defaultValue={query.maxPaise !== undefined ? query.maxPaise / 100 : ''}
+                />
+              </div>
+              <label style={{ display: 'flex', gap: 6, alignItems: 'center', height: 40 }}>
+                <input type="checkbox" name="stock" value="1" defaultChecked={query.inStock} /> In
+                stock only
+              </label>
+              <button className="sp-btn" type="submit">
+                Apply
+              </button>
+              <a
+                className="sp-btn sp-btn--outline"
+                href={query.q ? `${basePath}?q=${encodeURIComponent(query.q)}` : basePath}
+              >
+                Clear
+              </a>
+            </form>
+          </div>
+        </div>
+        <div className="sp-dropdown">
+          <span
+            role="button"
+            tabIndex={0}
+            aria-expanded="false"
+            aria-controls="sort-panel"
+            data-panel="sort-panel"
+          >
+            SORTED BY
+          </span>
+          <div className="sp-panel" id="sort-panel">
+            <nav className="sp-sort-list" aria-label="Sort products">
+              {sortOptions.map((s) => (
+                <a
+                  key={s}
+                  href={`${basePath}${listingQueryString(query, { sort: s, page: 1 })}`}
+                  aria-current={s === query.sort ? 'true' : undefined}
+                >
+                  {SORT_LABELS[s]}
+                </a>
+              ))}
+            </nav>
+          </div>
+        </div>
       </div>
     </>
   );
@@ -232,6 +257,8 @@ export function ListingView({
   options,
   emptyMessage,
   searchBar,
+  banners = [],
+  slides = [],
 }: {
   heading: string;
   basePath: string;
@@ -240,6 +267,10 @@ export function ListingView({
   options: FilterOptions;
   emptyMessage: string;
   searchBar?: React.ReactNode;
+  /** Active banners in display order: banner k follows product row k. */
+  banners?: StorefrontBanner[];
+  /** Slides shown above the filter bar (Admin > Banners > Shop page slider). With none, nothing is shown. */
+  slides?: StorefrontBanner[];
 }) {
   const sortOptions = SORT_KEYS.filter((s) => s !== 'relevance' || query.q) as SortKey[];
   const rows = chunk(listing.items, COLUMNS);
@@ -247,6 +278,10 @@ export function ListingView({
     <>
       <link rel="stylesheet" href="/css/collection_page.css" precedence="storefront" />
       <link rel="stylesheet" href="/css/collection_page_responsive.css" precedence="storefront" />
+      <link rel="stylesheet" href="/css/sharp-corners.css" precedence="storefront" />
+      <link rel="stylesheet" href="/css/side-icons.css" precedence="storefront" />
+      <link rel="stylesheet" href="/css/hero-slider.css" precedence="storefront" />
+      <link rel="stylesheet" href="/css/listing-cards.css" precedence="storefront" />
       <a className="sp-skip" href="#results">
         Skip to results
       </a>
@@ -254,6 +289,11 @@ export function ListingView({
       <div className="main-content-area" id="results">
         <h1 className="sp-skip">{heading}</h1>
         {searchBar}
+        {slides.length > 0 && (
+          <div className="shop-slider">
+            <HeroSlider slides={slides} showText={false} inline label="Shop highlights" />
+          </div>
+        )}
         <FilterBar basePath={basePath} query={query} options={options} sortOptions={sortOptions} />
         {listing.items.length === 0 ? (
           <div className="sp-page" style={{ borderTop: 0 }}>
@@ -262,10 +302,12 @@ export function ListingView({
         ) : (
           rows[0] && <Showcase row={rows[0]} />
         )}
+        {rows[0] && banners[0] && <BannerStrip banner={banners[0]} />}
       </div>
-      {rows.slice(1).map((row) => (
+      {rows.slice(1).map((row, i) => (
         <div className="main-content-area" key={row[0]?.id}>
           <Showcase row={row} />
+          {banners[i + 1] && <BannerStrip banner={banners[i + 1]!} />}
         </div>
       ))}
       <div className="main-content-area">

@@ -11,7 +11,7 @@ export default async function ResetPasswordPage({ searchParams }: Props) {
   const { token, error } = await searchParams;
   return (
     <PageShell>
-      <div className="sp-narrow">
+      <div className="sp-narrow sp-auth">
         <PageTitle>NEW PASSWORD</PageTitle>
         {token && !error ? (
           <ResetPasswordForm token={token} />

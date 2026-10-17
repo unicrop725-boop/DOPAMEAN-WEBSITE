@@ -12,11 +12,14 @@ export async function shoot(
   url: string,
   width: number,
   maskSelectors: string[] = [],
+  /** CSS added after load: lets the ORIGINAL page show an intentional, owner-approved change (e.g. sharp corners). */
+  extraCss?: string,
 ): Promise<Buffer> {
   await page.setViewportSize({ width, height: HEIGHT });
   await page.clock.install({ time: new Date('2026-01-01T10:00:00+05:30') });
   await page.goto(url, { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
+  if (extraCss) await page.addStyleTag({ content: extraCss });
   return page.screenshot({
     fullPage: true,
     animations: 'disabled',

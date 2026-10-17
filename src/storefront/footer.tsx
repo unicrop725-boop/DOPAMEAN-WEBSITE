@@ -15,7 +15,7 @@ export function SiteFooter() {
               {' '}
               <div className="dpm-contact-widget">
                 {' '}
-                <div className="dpm-contact-widget-title">{'CONTACT US [..]'}</div>{' '}
+                <div className="dpm-contact-widget-title">{'CONTACT US'}</div>{' '}
                 <hr className="dpm-widget-divider" />{' '}
                 <div className="dpm-contact-widget-links">
                   {' '}

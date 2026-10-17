@@ -12,9 +12,15 @@ import type {
  * signature maths follows Razorpay's documentation and is unit tested; the HTTP calls are not.
  * Requires auto-capture to be enabled on the Razorpay account.
  */
-const API = 'https://api.razorpay.com/v1';
+const DEFAULT_API = 'https://api.razorpay.com/v1';
 
-export type RazorpayConfig = { keyId: string; keySecret: string; webhookSecret: string };
+export type RazorpayConfig = {
+  keyId: string;
+  keySecret: string;
+  webhookSecret: string;
+  /** Override only for tests (a local fake server). Defaults to Razorpay's API. */
+  apiBase?: string;
+};
 
 function hmacHex(secret: string, data: string): string {
   return createHmac('sha256', secret).update(data).digest('hex');
@@ -30,6 +36,7 @@ export function createRazorpayProvider(
   cfg: RazorpayConfig,
   fetchImpl: typeof fetch = fetch,
 ): PaymentProvider {
+  const API = cfg.apiBase ?? DEFAULT_API;
   const auth = `Basic ${Buffer.from(`${cfg.keyId}:${cfg.keySecret}`).toString('base64')}`;
 
   async function call<T>(
@@ -151,11 +158,12 @@ export function createRazorpayProvider(
 
 /** Provider from environment, or null when Razorpay is not configured (online payment is then unavailable). */
 export function razorpayFromEnv(env: NodeJS.ProcessEnv = process.env): PaymentProvider | null {
-  const { RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET, RAZORPAY_WEBHOOK_SECRET } = env;
+  const { RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET, RAZORPAY_WEBHOOK_SECRET, RAZORPAY_API_BASE } = env;
   if (!RAZORPAY_KEY_ID || !RAZORPAY_KEY_SECRET || !RAZORPAY_WEBHOOK_SECRET) return null;
   return createRazorpayProvider({
     keyId: RAZORPAY_KEY_ID,
     keySecret: RAZORPAY_KEY_SECRET,
     webhookSecret: RAZORPAY_WEBHOOK_SECRET,
+    apiBase: RAZORPAY_API_BASE || undefined,
   });
 }

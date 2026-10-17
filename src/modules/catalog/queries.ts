@@ -387,8 +387,9 @@ export async function listPublishedSlugs(db: DbOrTx): Promise<{ slug: string; up
 /** Public URL for a stored media key: seeded sample images are site paths, uploads live in S3. */
 export function mediaUrl(key: string, s3PublicBase = process.env.S3_PUBLIC_URL): string {
   if (key.startsWith('/') || /^https?:\/\//.test(key)) return key;
+  // Without a public bucket URL the app serves uploads itself from /media (see src/app/media).
   const base = (s3PublicBase ?? '').replace(/\/$/, '');
-  return `${base}/${key}`;
+  return base ? `${base}/${key}` : `/media/${key}`;
 }
 
 export type PurchasableVariant = {

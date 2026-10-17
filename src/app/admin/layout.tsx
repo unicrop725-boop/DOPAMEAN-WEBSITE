@@ -4,6 +4,7 @@ import './admin.css';
 export const metadata: Metadata = {
   title: { default: 'DOPAMEAN Admin', template: '%s | DOPAMEAN Admin' },
   robots: { index: false, follow: false },
+  icons: { icon: '/favicon.png' },
 };
 
 export default function AdminRootLayout({ children }: { children: React.ReactNode }) {

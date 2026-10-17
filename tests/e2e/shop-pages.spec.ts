@@ -14,11 +14,11 @@ async function register(page: Page, label: string) {
   await page.getByLabel('Email').fill(email);
   await page.getByLabel('Password').fill(PASSWORD);
   await page.getByRole('button', { name: 'Create account' }).click();
-  await expect(page.getByRole('status')).toContainText('Check your inbox');
+  await expect(page.locator('main').getByRole('status')).toContainText('Check your inbox');
   const mail = await waitForEmail(email, { subject: /Verify your email/ });
   await page.goto(firstUrl(mail.text)); // verification link also signs the user in
   await expect(page).toHaveURL(/\/account\?verified=1/);
-  await expect(page.getByRole('status')).toContainText('verified');
+  await expect(page.locator('main').getByRole('status')).toContainText('verified');
   return email;
 }
 
@@ -100,6 +100,7 @@ test.describe('customer account journey (real browser, real email)', () => {
 
     // Delete the account: wrong password is refused, right password signs out and removes the login.
     await page.goto('/account/privacy');
+    await page.waitForLoadState('networkidle'); // the form is a client component: wait until it is interactive
     await page.getByLabel('Your password').fill('not-my-password');
     await page.getByLabel('Type DELETE to confirm').fill('DELETE');
     await page.getByRole('button', { name: 'Delete my account' }).click();
@@ -159,17 +160,17 @@ test.describe('customer account journey (real browser, real email)', () => {
     await page.goto('/forgot-password');
     await page.getByLabel('Email').fill(`nobody-${run}@example.test`);
     await page.getByRole('button', { name: 'Send reset link' }).click();
-    await expect(page.getByRole('status')).toContainText('If an account exists');
+    await expect(page.locator('main').getByRole('status')).toContainText('If an account exists');
   });
 
   test('password reset works end to end through email', async ({ browser }) => {
     const { context, page } = await newPage(browser);
     const email = await register(page, 'reset');
-    await page.request.post('/api/auth/sign-out', { headers: { origin: 'http://localhost:3100' } });
+    await context.clearCookies(); // a visitor who forgot the password is not signed in
     await page.goto('/forgot-password');
     await page.getByLabel('Email').fill(email);
     await page.getByRole('button', { name: 'Send reset link' }).click();
-    await expect(page.getByRole('status')).toContainText('If an account exists');
+    await expect(page.locator('main').getByRole('status')).toContainText('If an account exists');
     const resetMail = await waitForEmail(email, { subject: /Reset your/ });
     const link = firstUrl(resetMail.text);
     expect(link).toContain('reset-password');
@@ -232,7 +233,7 @@ test.describe('content pages and contact form', () => {
     await page.getByLabel('Email').fill(`contact-${run}@example.test`);
     await page.getByLabel('Message').fill('Hello, is the sample shirt available in XXL?');
     await page.getByRole('button', { name: 'Send message' }).click();
-    await expect(page.getByRole('status')).toContainText('Thank you');
+    await expect(page.locator('main').getByRole('status')).toContainText('Thank you');
     const pool = new Pool({ connectionString: dbUrl() });
     const stored = await pool.query('select message from contact_message where email = $1', [
       `contact-${run}@example.test`,
@@ -249,7 +250,7 @@ test.describe('content pages and contact form', () => {
       (document.getElementById('website') as HTMLInputElement).value = 'http://spam.test';
     });
     await page.getByRole('button', { name: 'Send message' }).click();
-    await expect(page.getByRole('status')).toBeVisible();
+    await expect(page.locator('main').getByRole('status')).toBeVisible();
     const bot = await pool.query('select 1 from contact_message where email = $1', [
       `bot-${run}@example.test`,
     ]);
@@ -356,7 +357,7 @@ test.describe('catalog browsing: collections, filters, sort, pagination, search'
     await page.getByRole('button', { name: 'Search', exact: true }).click();
     await expect(page).toHaveURL(/q=oxfrd/);
     await expect(page.locator('.product-name').first()).toHaveText('SAMPLE OXFORD SHIRT');
-    await expect(page.getByRole('status')).toContainText('result');
+    await expect(page.getByRole('status').filter({ hasText: 'result' })).toBeVisible();
     await page.goto('/search?q=zzzzqqqq');
     await expect(page.getByText('NO PRODUCTS FOUND FOR')).toBeVisible();
     // Hostile input is treated as plain text: the page renders (fuzzy matching may or may not find rows).
@@ -417,7 +418,10 @@ test.describe('product page data and structured data', () => {
     await page.goto('/products/sample-oxford-shirt');
     await page.waitForLoadState('networkidle');
     await expect(page.locator('[data-tab-panel="materials"]')).toBeHidden();
-    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    // The dock is set by an IntersectionObserver that fires when the sentinel crosses the viewport, so scroll
+    // the way a visitor does (in steps through it); a single jump to the bottom skips the crossing.
+    await page.evaluate(() => document.getElementById('product-dock')?.scrollIntoView());
+    await page.mouse.wheel(0, 300);
     await expect(page.locator('#component-container')).toHaveClass(/is-docked/);
     await expect(page.locator('[data-tab-panel="materials"]')).toBeVisible();
     await page.locator('.details-tabs button', { hasText: 'CARE GUIDE' }).click();
@@ -467,7 +471,7 @@ test.describe('site chrome', () => {
     const res = await page.goto('/collections/nope');
     expect(res?.status()).toBe(404);
     await expect(page.getByRole('heading', { name: /PAGE NOT FOUND/ })).toBeVisible();
-    await expect(page.locator('.side-navigation-wrapper')).toBeVisible();
+    await expect(page.locator('.nav-box-dark')).toBeVisible();
   });
 });
 

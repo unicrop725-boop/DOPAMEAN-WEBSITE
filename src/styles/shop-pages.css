@@ -273,14 +273,103 @@
 .sp-panel .sp-field {
   min-width: 140px;
 }
+/* SORTED BY: a vertical list that drops down under the label. It opens on hover (mouse), and on click, tap or
+   Enter, so it also works on touch screens and with the keyboard. */
+.filter-bar {
+  position: relative;
+}
+.sp-dropdown {
+  position: relative;
+  /* the hover area reaches the bottom edge of the bar, so the pointer can move into the list without a gap */
+  padding: 15px 0;
+  margin: -15px 0;
+}
+.sp-dropdown > [role='button'] {
+  cursor: pointer;
+}
+.sp-dropdown > .sp-panel {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 60;
+  min-width: 260px;
+  padding: 6px 0;
+  border: 1px solid var(--color-ink);
+  background: var(--color-paper);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+}
+@media (hover: hover) {
+  .sp-dropdown:hover > .sp-panel {
+    display: block;
+  }
+}
+/* FILTER opens the same way, from the left edge, with the fields stacked. */
+.sp-dropdown--left > .sp-panel {
+  right: auto;
+  left: 0;
+  width: 340px;
+  max-width: calc(100vw - 24px);
+  padding: 18px 20px 20px;
+  font-size: 0.9rem;
+}
+.sp-dropdown--left > .sp-panel form {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 16px;
+}
+.sp-dropdown--left > .sp-panel .sp-field {
+  min-width: 0;
+}
+.sp-dropdown--left > .sp-panel label,
+.sp-dropdown--left > .sp-panel legend {
+  font-size: 0.8rem;
+}
+.sp-dropdown--left > .sp-panel .sp-input {
+  width: 100%;
+  height: 44px;
+  font-size: 0.9rem;
+}
+.sp-dropdown--left > .sp-panel input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+}
+.sp-dropdown--left > .sp-panel fieldset label {
+  font-size: 0.85rem;
+}
+.sp-dropdown--left > .sp-panel .sp-btn {
+  height: 46px;
+  width: 100%;
+  font-size: 0.85rem;
+}
 .sp-sort-list {
   display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
+  flex-direction: column;
+}
+.sp-sort-list a {
+  display: block;
+  padding: 13px 22px;
+  font-size: 1rem;
+  white-space: nowrap;
+}
+.sp-sort-list a:hover,
+.sp-sort-list a:focus-visible {
+  background: var(--color-ink);
+  color: var(--color-paper);
 }
 .sp-sort-list a[aria-current='true'] {
   text-decoration: underline;
   text-underline-offset: 4px;
+}
+.sp-sort-list a[aria-current='true']::before {
+  content: '\2022';
+  margin-right: 8px;
+}
+.sp-sort-list a:not([aria-current='true'])::before {
+  content: '';
+  display: inline-block;
+  width: 0.9em;
+  margin-right: 8px;
 }
 .filter-bar > span[role='button'] {
   cursor: pointer;
@@ -302,5 +391,515 @@
   .sp-panel,
   .sp-pagination {
     border-left: 0;
+  }
+}
+
+/* ---- cart, checkout and order screens ---------------------------------------------------- */
+.sp-wide {
+  max-width: 1040px;
+}
+.sp-cart {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 18px;
+  align-items: start;
+}
+/* Cart: big product rows on the left separated by hairlines, a big summary panel on the right. The page
+   uses the full width of the content area. */
+.sp-cart-wrap {
+  max-width: none;
+}
+.sp-cart-wrap .sp-title {
+  font-size: 1.5rem;
+  margin-bottom: 28px;
+}
+.sp-cart {
+  grid-template-columns: minmax(0, 1fr) minmax(380px, 480px);
+  gap: 48px;
+}
+.sp-cart-lines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.sp-cart-line {
+  position: relative;
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+  padding: 30px 0;
+  border-bottom: 1px solid var(--color-ink);
+  text-transform: none;
+}
+.sp-cart-line:first-child {
+  padding-top: 6px;
+}
+.sp-cart-imgbox {
+  display: block;
+  border: 1px solid var(--color-ink);
+  background: var(--color-paper);
+}
+.sp-cart-img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  background: var(--color-panel-alt);
+  display: block;
+}
+.sp-cart-info {
+  min-width: 0;
+  padding-right: 56px; /* room for the remove button */
+}
+.sp-cart-name {
+  margin: 0 0 8px;
+  font-size: 1.4rem;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+.sp-cart-price {
+  margin: 0 0 24px;
+  font-size: 1.15rem;
+}
+.sp-cart-opts {
+  list-style: none;
+  margin: 0 0 24px;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.sp-cart-opts li {
+  min-width: 140px;
+  height: 56px;
+  padding: 0 22px;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--color-ink);
+  background: var(--color-paper);
+  font-size: 1rem;
+  text-transform: uppercase;
+}
+.sp-cart-stock {
+  margin: 0 0 16px;
+  color: var(--color-danger);
+  font-size: 0.95rem;
+}
+.sp-cart-qtyrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 20px;
+}
+.sp-cart-qtylabel {
+  font-size: 1rem;
+  text-transform: none;
+}
+.sp-qty {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+.sp-qty button {
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-ink);
+  border-radius: 0;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font: inherit;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.sp-qty button:hover:not([disabled]) {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+.sp-qty button[disabled] {
+  border-color: var(--color-line-strong);
+  color: var(--color-line-strong);
+  cursor: not-allowed;
+}
+.sp-qty button:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}
+.sp-qty-n {
+  min-width: 40px;
+  text-align: center;
+  font-size: 1.25rem;
+}
+.sp-cart-total {
+  margin: 0 0 0 auto;
+  white-space: nowrap;
+  font-size: 1.25rem;
+}
+.sp-cart-x {
+  position: absolute;
+  top: 30px;
+  right: 0;
+}
+.sp-cart-line:first-child .sp-cart-x {
+  top: 6px;
+}
+.sp-cart-x button {
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  color: var(--color-muted-text);
+  cursor: pointer;
+}
+.sp-cart-x button svg {
+  width: 28px;
+  height: 28px;
+}
+.sp-cart-x button:hover,
+.sp-cart-x button:focus-visible {
+  color: var(--color-ink);
+}
+.sp-cart-x button:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}
+/* The summary panel: Total first and large, then the breakdown, then the buttons. */
+.sp-cart-summary {
+  border: 1px solid var(--color-ink);
+  background: var(--color-paper);
+  padding: 40px 42px;
+  position: sticky;
+  top: 16px;
+  font-size: 1rem;
+}
+.sp-cart-summary .sp-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  font-size: 1.05rem;
+}
+.sp-cart-summary .sp-summary-total {
+  order: -1;
+  border-top: 0;
+  border-bottom: 1px solid var(--color-line-strong);
+  padding: 0 0 30px;
+  margin-bottom: 14px;
+  font-size: 1.75rem;
+}
+.sp-cart-summary .sp-summary-total dt::after {
+  content: ':';
+}
+.sp-cart-summary .sp-field-hint {
+  margin: 20px 0 0;
+  font-size: 0.9rem;
+}
+.sp-cart-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 32px;
+}
+.sp-cart-actions .sp-btn {
+  height: 66px;
+  font-size: 1rem;
+  text-decoration: none;
+}
+.sp-cart-checkout[aria-disabled='true'] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.sp-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.sp-cart-summary .sp-summary-total {
+  order: -1;
+  border-top: 0;
+  border-bottom: 1px solid var(--color-line-strong);
+  padding: 0 0 22px;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+.sp-cart-summary .sp-summary-total dt::after {
+  content: ':';
+}
+.sp-cart-summary .sp-field-hint {
+  margin: 14px 0 0;
+}
+.sp-cart-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 22px;
+}
+.sp-cart-actions .sp-btn {
+  height: 52px;
+  text-decoration: none;
+}
+.sp-cart-checkout[aria-disabled='true'] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.sp-summary {
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+.sp-summary > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.sp-summary dt,
+.sp-summary dd {
+  margin: 0;
+}
+.sp-summary-total {
+  border-top: 1px solid var(--color-ink);
+  padding-top: 8px;
+}
+.sp-checkout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 24px;
+  align-items: start;
+}
+.sp-radio {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  border: 1px solid var(--color-ink);
+  background: var(--color-paper);
+  padding: 10px 12px;
+}
+.sp-radio input {
+  margin-top: 3px;
+}
+.sp-radio[aria-disabled='true'] {
+  opacity: 0.55;
+}
+.sp-fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+.sp-fieldset legend {
+  font-size: 0.7rem;
+  margin-bottom: 6px;
+  padding: 0;
+}
+.sp-badge--status {
+  margin-left: 0;
+}
+.sp-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  border-left: 1px solid var(--color-ink);
+}
+.sp-timeline li {
+  padding-left: 12px;
+  text-transform: none;
+}
+.sp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.75rem;
+}
+.sp-table th,
+.sp-table td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--color-ink);
+  vertical-align: top;
+}
+.sp-table td.num,
+.sp-table th.num {
+  text-align: right;
+  white-space: nowrap;
+}
+
+@media (max-width: 860px) {
+  .sp-cart,
+  .sp-checkout {
+    grid-template-columns: 1fr;
+  }
+  .sp-cart {
+    gap: 28px;
+  }
+  .sp-cart-wrap .sp-title {
+    font-size: 1.2rem;
+  }
+  .sp-cart-line {
+    grid-template-columns: 120px minmax(0, 1fr);
+    gap: 16px;
+    padding: 22px 0;
+  }
+  .sp-cart-info {
+    padding-right: 40px;
+  }
+  .sp-cart-name {
+    font-size: 1.1rem;
+  }
+  .sp-cart-price {
+    font-size: 1rem;
+    margin-bottom: 14px;
+  }
+  .sp-cart-opts {
+    margin-bottom: 14px;
+  }
+  .sp-cart-opts li {
+    min-width: 0;
+    height: 44px;
+    padding: 0 14px;
+    font-size: 0.9rem;
+  }
+  .sp-qty button {
+    width: 44px;
+    height: 44px;
+  }
+  .sp-cart-x {
+    top: 22px;
+  }
+  .sp-cart-x button {
+    width: 40px;
+    height: 40px;
+  }
+  .sp-cart-x button svg {
+    width: 22px;
+    height: 22px;
+  }
+  .sp-cart-summary {
+    position: static;
+    padding: 26px 22px;
+  }
+  .sp-cart-summary .sp-summary-total {
+    font-size: 1.4rem;
+    padding-bottom: 22px;
+  }
+  .sp-cart-actions .sp-btn {
+    height: 58px;
+  }
+}
+
+/* Staff-uploaded banner between two rows of products (admin > Banners). */
+.sp-ad-banner {
+  border-top: 1px solid #000;
+  background: #ececec;
+}
+.sp-ad-banner a {
+  display: block;
+}
+.sp-ad-banner-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Sign in / register / password pages: one centered column with larger type (owner request, 2026-10-17). */
+.sp-page:has(.sp-auth) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 75vh;
+}
+.sp-auth {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+}
+.sp-auth .sp-title {
+  font-size: 1.75rem;
+  text-align: center;
+  margin-bottom: 28px;
+}
+.sp-auth .sp-form {
+  gap: 20px;
+}
+.sp-auth .sp-field {
+  gap: 8px;
+}
+.sp-auth .sp-field label {
+  font-size: 0.95rem;
+}
+.sp-auth .sp-input {
+  height: 54px;
+  padding: 0 14px;
+  font-size: 1.1rem;
+}
+.sp-auth .sp-btn {
+  height: 54px;
+  font-size: 1rem;
+  width: 100%;
+}
+.sp-auth .sp-text {
+  font-size: 1.05rem;
+  text-align: center;
+  max-width: none;
+}
+.sp-auth .sp-field-hint,
+.sp-auth .sp-message {
+  font-size: 0.95rem;
+}
+
+/* Contact page: centered heading and text, a wide form with email and subject side by side. */
+.sp-contact {
+  max-width: 820px;
+  margin: 0 auto;
+}
+.sp-contact .sp-title {
+  font-size: 1.75rem;
+  text-align: center;
+  margin-bottom: 14px;
+}
+.sp-contact .sp-text {
+  text-align: center;
+  font-size: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+.sp-contact-form {
+  margin-top: 32px;
+  gap: 20px;
+}
+.sp-contact-form .sp-field label {
+  font-size: 0.85rem;
+}
+.sp-contact-form .sp-input {
+  height: 52px;
+  padding: 0 14px;
+  font-size: 1rem;
+}
+.sp-contact-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.sp-contact-form textarea.sp-contact-message {
+  height: 220px;
+  padding: 14px;
+  resize: vertical;
+  line-height: 1.5;
+}
+.sp-contact-send {
+  width: 100%;
+  height: 56px;
+  font-size: 1rem;
+}
+@media (max-width: 640px) {
+  .sp-contact-row {
+    grid-template-columns: 1fr;
   }
 }

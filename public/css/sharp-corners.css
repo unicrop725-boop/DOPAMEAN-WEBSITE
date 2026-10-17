@@ -1,0 +1,7 @@
+/* Owner request (2026-10-17): the side menu, search and contact boxes have sharp corners on every page.
+   Loaded after each page's original stylesheets, which stay unchanged (ADR 0004). */
+.nav-box-dark,
+.nav-box-light,
+.dpm-contact-widget {
+  border-radius: 0;
+}
