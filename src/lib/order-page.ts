@@ -61,6 +61,27 @@ export function customerTimeline(detail: OrderDetail): { at: Date; label: string
     .map((e) => ({ at: e.at, label: EVENT_LABELS[e.type]! }));
 }
 
+/** How a status reads at a glance: green = good, amber = waiting, red = problem, blue = on its way or money returned. */
+export type StatusTone = 'success' | 'warning' | 'danger' | 'info';
+
+const STATUS_TONES: Record<string, StatusTone> = {
+  pending_payment: 'warning',
+  confirmed: 'success',
+  completed: 'success',
+  cancelled: 'danger',
+  unfulfilled: 'warning',
+  shipped: 'info',
+  delivered: 'success',
+  pending: 'warning',
+  captured: 'success',
+  failed: 'danger',
+  partially_refunded: 'info',
+  refunded: 'info',
+  needs_review: 'warning',
+};
+
+export const statusTone = (status: string): StatusTone => STATUS_TONES[status] ?? 'warning';
+
 export const STATUS_LABEL: Record<string, string> = {
   pending_payment: 'Awaiting payment',
   confirmed: 'Confirmed',

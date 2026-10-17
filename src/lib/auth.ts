@@ -19,6 +19,12 @@ function createAuth() {
   return betterAuth({
     appName: 'DOPAMEAN',
     baseURL: env.APP_URL,
+    // Sign-in only works from the address in APP_URL. While developing, the app is often opened on a neighbouring
+    // port (a second dev server), which would otherwise be refused with a misleading 403. Never in production.
+    trustedOrigins:
+      env.NODE_ENV === 'production'
+        ? []
+        : ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002'],
     secret: env.BETTER_AUTH_SECRET,
     database: drizzleAdapter(db, { provider: 'pg', schema: authSchema }),
     emailAndPassword: {

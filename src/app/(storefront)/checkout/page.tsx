@@ -76,7 +76,7 @@ export default async function CheckoutPage() {
 
   return (
     <PageShell>
-      <div className="sp-wide">
+      <div className="sp-wide sp-checkout-wrap">
         <PageTitle>CHECKOUT</PageTitle>
         {nothingAvailable && (
           <p role="alert" className="sp-message sp-message--error">

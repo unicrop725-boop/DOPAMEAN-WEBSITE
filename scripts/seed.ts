@@ -97,7 +97,7 @@ async function main() {
           })),
         });
         productIds.push(productId);
-        for (let m = 0; m < 3; m++) {
+        for (let m = 0; m < 4; m++) {
           const key = PHOTOS[(i + m) % PHOTOS.length]!;
           await addProductMedia(tx, productId, {
             objectKey: key,

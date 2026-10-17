@@ -698,8 +698,288 @@
   margin-bottom: 6px;
   padding: 0;
 }
+
+/* Checkout, bigger: roomier fields, larger labels and headings, a larger summary box (owner request,
+   2026-10-17). Scoped to the checkout form so the login, register and account forms keep their size. */
+.sp-checkout-wrap {
+  max-width: none;
+}
+.sp-checkout-wrap .sp-title {
+  font-size: 1.25rem;
+  margin-bottom: 24px;
+}
+.sp-checkout {
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 440px);
+  gap: 40px;
+}
+.sp-checkout .sp-form {
+  gap: 18px;
+  max-width: 720px;
+}
+.sp-checkout .sp-field {
+  gap: 7px;
+}
+.sp-checkout .sp-field label,
+.sp-checkout .sp-label,
+.sp-checkout .sp-fieldset legend {
+  font-size: 0.76rem;
+}
+.sp-checkout .sp-input,
+.sp-checkout .sp-select {
+  height: 48px;
+  padding: 0 14px;
+  font-size: 0.9rem;
+}
+.sp-checkout .sp-field-hint {
+  font-size: 0.76rem;
+}
+.sp-checkout .sp-subtitle {
+  font-size: 0.95rem;
+  margin: 32px 0 4px;
+  padding-top: 16px;
+}
+.sp-checkout .sp-subtitle:first-child,
+.sp-checkout .sp-message + .sp-subtitle {
+  margin-top: 0;
+}
+.sp-checkout .sp-radio {
+  gap: 12px;
+  padding: 15px 16px;
+  font-size: 0.88rem;
+}
+.sp-checkout .sp-radio input {
+  width: 17px;
+  height: 17px;
+  margin-top: 2px;
+}
+.sp-checkout .sp-message {
+  font-size: 0.88rem;
+}
+.sp-checkout .sp-box {
+  padding: 26px 26px;
+  position: sticky;
+  top: 16px;
+  font-size: 0.9rem;
+}
+.sp-checkout .sp-box .sp-subtitle {
+  font-size: 0.95rem;
+  margin-bottom: 14px;
+}
+.sp-checkout .sp-list {
+  gap: 10px;
+}
+.sp-checkout .sp-list > li {
+  padding: 12px 14px !important; /* the markup sets a small inline padding */
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+.sp-checkout .sp-address-name {
+  font-size: 0.88rem;
+  margin-bottom: 4px;
+}
+.sp-checkout .sp-summary {
+  gap: 11px;
+  font-size: 0.92rem;
+}
+.sp-checkout .sp-summary-total {
+  padding-top: 14px;
+  font-size: 1.2rem;
+}
+.sp-checkout .sp-box > .sp-field-hint {
+  margin: 12px 0 0;
+}
+.sp-checkout .sp-box .sp-actions {
+  gap: 10px;
+  margin-top: 20px !important;
+}
+.sp-checkout .sp-box .sp-btn {
+  height: 52px;
+  font-size: 0.88rem;
+}
+/* Account dashboard (overview, orders, addresses, privacy), bigger: wider page, larger tabs, headings, text,
+   boxes, rows and buttons (owner request, 2026-10-17). Scoped to the account pages. */
+.sp-account.sp-medium {
+  max-width: 1100px;
+}
+.sp-account .sp-title {
+  font-size: 1.5rem;
+  margin-bottom: 28px;
+}
+.sp-account .sp-subnav {
+  gap: 34px;
+  margin-bottom: 34px;
+  padding-bottom: 16px;
+  font-size: 1rem;
+}
+.sp-account .sp-subtitle {
+  font-size: 1.05rem;
+  margin: 36px 0 14px;
+  padding-top: 18px;
+}
+.sp-account .sp-box {
+  padding: 30px 34px;
+}
+.sp-account .sp-label {
+  font-size: 0.85rem;
+  margin: 0 0 6px;
+}
+.sp-account .sp-text {
+  font-size: 1.15rem;
+  line-height: 1.6;
+  margin: 0 0 24px;
+  max-width: none;
+}
+.sp-account .sp-box .sp-text:last-child {
+  margin-bottom: 0;
+}
+.sp-account .sp-message {
+  font-size: 1rem;
+  padding: 16px 20px;
+}
+.sp-account .sp-btn {
+  height: 52px;
+  padding: 0 30px;
+  font-size: 0.9rem;
+}
+.sp-account .sp-list {
+  gap: 16px;
+}
+.sp-account .sp-list > li {
+  padding: 22px 26px;
+  font-size: 1rem;
+  line-height: 1.65;
+}
+.sp-account .sp-address-name {
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+}
+.sp-account .sp-field label {
+  font-size: 0.85rem;
+}
+.sp-account .sp-input,
+.sp-account .sp-select {
+  height: 52px;
+  padding: 0 16px;
+  font-size: 0.95rem;
+}
+.sp-account .sp-field-hint {
+  font-size: 0.85rem;
+}
+.sp-account .sp-table {
+  font-size: 0.95rem;
+}
+.sp-account .sp-table th,
+.sp-account .sp-table td {
+  padding: 14px 16px;
+}
+.sp-account .sp-empty {
+  padding: 44px 20px;
+  font-size: 1rem;
+}
+.sp-account .sp-badge {
+  font-size: 0.75rem;
+  padding: 2px 9px;
+}
+/* Order page, a little bigger (owner request, 2026-10-17): larger text, roomier boxes, rows and picture.
+   Scoped to the order page; a few sizes are set inline in the markup, so those are overridden here. */
+.sp-order.sp-wide {
+  max-width: 1100px;
+}
+.sp-order .sp-title {
+  font-size: 1.3rem;
+}
+.sp-order .sp-text {
+  font-size: 0.95rem;
+}
+.sp-order > .sp-text.sp-muted {
+  margin-top: -8px !important;
+  margin-bottom: 22px;
+}
+.sp-order .sp-label {
+  font-size: 0.78rem;
+  margin-bottom: 8px;
+}
+.sp-order .sp-grid-2 > * {
+  padding: 20px 22px;
+}
+.sp-order .sp-badge {
+  font-size: 0.75rem;
+  padding: 3px 10px;
+}
+.sp-order .sp-message {
+  font-size: 0.95rem;
+  padding: 16px 20px;
+}
+.sp-order .sp-subtitle {
+  font-size: 0.95rem;
+  margin: 34px 0 14px;
+  padding-top: 18px;
+}
+.sp-order .sp-table {
+  font-size: 0.92rem;
+}
+.sp-order .sp-table th,
+.sp-order .sp-table td {
+  padding: 14px 12px;
+}
+.sp-order .sp-table img {
+  width: 64px;
+  height: 82px;
+}
+.sp-order .sp-table td > span {
+  gap: 16px !important; /* the markup sets an inline gap */
+}
+.sp-order .sp-summary {
+  max-width: 460px !important; /* the markup sets an inline width */
+  gap: 10px;
+  font-size: 0.95rem;
+}
+.sp-order .sp-summary-total {
+  padding-top: 12px;
+  font-size: 1.15rem;
+}
+.sp-order .sp-timeline {
+  gap: 12px;
+  font-size: 0.92rem;
+}
+.sp-order .sp-timeline li {
+  padding-left: 16px;
+}
+.sp-order .sp-list > li {
+  padding: 16px 20px;
+  font-size: 0.95rem;
+}
+.sp-order .sp-box summary {
+  font-size: 0.92rem;
+  padding: 6px 0;
+}
+.sp-order .sp-btn {
+  height: 48px;
+  font-size: 0.85rem;
+}
 .sp-badge--status {
   margin-left: 0;
+}
+/* Status colours: soft tinted background, darker border, dark text of the same hue (all above 4.5:1 contrast). */
+.sp-badge--success {
+  background: #dcf5e4;
+  border-color: #15803d;
+  color: #14532d;
+}
+.sp-badge--warning {
+  background: #fdf0d2;
+  border-color: #b7791f;
+  color: #7a4a05;
+}
+.sp-badge--danger {
+  background: #fbdcd8;
+  border-color: #c0392b;
+  color: #8b1f13;
+}
+.sp-badge--info {
+  background: #dbeafe;
+  border-color: #2563eb;
+  color: #1e3a8a;
 }
 .sp-timeline {
   list-style: none;
@@ -780,6 +1060,26 @@
   .sp-cart-x button svg {
     width: 22px;
     height: 22px;
+  }
+  .sp-checkout {
+    gap: 28px;
+  }
+  .sp-checkout-wrap .sp-title {
+    font-size: 1.1rem;
+  }
+  .sp-checkout .sp-input,
+  .sp-checkout .sp-select {
+    height: 46px;
+  }
+  .sp-checkout .sp-box {
+    position: static;
+    padding: 20px 18px;
+  }
+  .sp-checkout .sp-summary-total {
+    font-size: 1.1rem;
+  }
+  .sp-checkout .sp-box .sp-btn {
+    height: 48px;
   }
   .sp-cart-summary {
     position: static;

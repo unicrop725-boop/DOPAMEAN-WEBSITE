@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { customerTimeline, STATUS_LABEL, type OrderPageData } from '@/lib/order-page';
+import { customerTimeline, STATUS_LABEL, statusTone, type OrderPageData } from '@/lib/order-page';
 import { mediaUrl } from '@/modules/catalog';
 import { stateName } from '@/modules/customers';
 import { Money, formatBracketPrice } from '@/modules/pricing';
@@ -48,7 +48,7 @@ export function OrderView({
     .reduce((s, r) => s + r.amountPaise, 0);
 
   return (
-    <div className="sp-wide">
+    <div className="sp-wide sp-order">
       <h1 className="sp-title">[ ORDER #{o.number} ]</h1>
       <p className="sp-text sp-muted" style={{ marginTop: -10 }}>
         Placed {dateText(o.placedAt)}
@@ -80,15 +80,23 @@ export function OrderView({
         <div>
           <p className="sp-label sp-muted">Order</p>
           <p className="sp-text" style={{ margin: 0 }}>
-            <span className="sp-badge sp-badge--status">{STATUS_LABEL[o.status]}</span>{' '}
-            <span className="sp-badge sp-badge--status">{STATUS_LABEL[o.fulfillmentStatus]}</span>
+            <span className={`sp-badge sp-badge--status sp-badge--${statusTone(o.status)}`}>
+              {STATUS_LABEL[o.status]}
+            </span>{' '}
+            <span
+              className={`sp-badge sp-badge--status sp-badge--${statusTone(o.fulfillmentStatus)}`}
+            >
+              {STATUS_LABEL[o.fulfillmentStatus]}
+            </span>
           </p>
         </div>
         <div>
           <p className="sp-label sp-muted">Payment</p>
           <p className="sp-text" style={{ margin: 0 }}>
             {o.paymentMethod === 'cod' ? 'Cash on delivery' : 'Paid online'}:{' '}
-            <span className="sp-badge sp-badge--status">
+            <span
+              className={`sp-badge sp-badge--status sp-badge--${statusTone(payment ? payment.status : 'pending')}`}
+            >
               {payment ? STATUS_LABEL[payment.status] : 'Pending'}
             </span>
           </p>
@@ -185,12 +193,16 @@ export function OrderView({
           <dd>{label(o.taxPaise)}</dd>
         </div>
         {cgst + sgst > 0 && (
-          <div className="sp-muted">
-            <dt>CGST / SGST</dt>
-            <dd>
-              {label(cgst)} / {label(sgst)}
-            </dd>
-          </div>
+          <>
+            <div className="sp-muted">
+              <dt>CGST</dt>
+              <dd>{label(cgst)}</dd>
+            </div>
+            <div className="sp-muted">
+              <dt>SGST</dt>
+              <dd>{label(sgst)}</dd>
+            </div>
+          </>
         )}
         {igst > 0 && (
           <div className="sp-muted">

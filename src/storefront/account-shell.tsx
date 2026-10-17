@@ -19,7 +19,7 @@ export function AccountShell({
 }) {
   return (
     <PageShell>
-      <div className="sp-medium">
+      <div className="sp-medium sp-account">
         <PageTitle>{title}</PageTitle>
         <nav className="sp-subnav" aria-label="Account">
           {LINKS.map((l) => (

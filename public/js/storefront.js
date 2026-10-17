@@ -212,10 +212,17 @@
   if (isDesktop) {
     var thumbs = document.querySelectorAll('.thumbnail-gallery img');
     var cards = document.querySelectorAll('.product-image-card');
+    var scroller = document.querySelector('.product-image-scroller');
     thumbs.forEach(function (thumb, i) {
       thumb.addEventListener('click', function () {
-        if (cards[i])
-          cards[i].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+        if (!cards[i] || !scroller) return;
+        // Move only the picture strip, sideways. (scrollIntoView would also scroll the whole page up or down,
+        // which made the picture jump to the top of the window.)
+        var left =
+          scroller.scrollLeft +
+          cards[i].getBoundingClientRect().left -
+          scroller.getBoundingClientRect().left;
+        scroller.scrollTo({ left: left, behavior: 'smooth' });
       });
     });
   }

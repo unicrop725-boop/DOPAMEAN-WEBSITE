@@ -30,3 +30,34 @@
 .size-selector button {
   height: 52px;
 }
+
+/* Bigger name row, bigger Add to cart bar with a bigger icon and price, and a thin line along the bottom edge
+   (owner request, 2026-10-17). */
+.product-header {
+  height: 76px;
+  padding: 0 0 0 20px;
+}
+.product-header h1 {
+  font-size: 16px;
+  letter-spacing: 0.01em;
+}
+.product-header .price {
+  padding: 0 22px;
+  font-size: 15px;
+}
+.add-to-cart-bar {
+  height: 66px;
+  padding: 0 20px;
+  font-size: 15px;
+  /* a white hairline just inside the black bar, next to the card's black edge, so the bottom shows a clear line */
+  box-shadow: inset 0 -1px 0 #fff;
+}
+.add-to-cart-bar > span:first-child::before {
+  width: 1.7em;
+  height: 1.7em;
+  margin-right: 0.7em;
+}
+.add-to-cart-bar .final-price {
+  font-size: 15px;
+  opacity: 0.92;
+}

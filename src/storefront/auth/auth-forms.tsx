@@ -65,9 +65,15 @@ export function LoginForm({ next }: { next: string }) {
     const res = await authClient.signIn.email({ email, password: String(form.get('password')) });
     setBusy(false);
     if (res.error) {
-      if (res.error.status === 403) {
+      if (res.error.status === 403 && res.error.code === 'EMAIL_NOT_VERIFIED') {
         setNeedsVerify(email);
         setStatus({ kind: 'error', text: 'Please verify your email address before signing in.' });
+      } else if (res.error.status === 403) {
+        // Any other 403 (for example a request from a web address the shop does not trust) is not about the email.
+        setStatus({
+          kind: 'error',
+          text: 'Sign-in is not allowed from this web address. Open the shop at its usual address and try again.',
+        });
       } else if (res.error.status === 429) {
         setStatus({ kind: 'error', text: 'Too many attempts. Please try again later.' });
       } else {

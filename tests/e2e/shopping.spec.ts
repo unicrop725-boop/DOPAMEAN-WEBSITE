@@ -189,7 +189,8 @@ test.describe('guest checkout (cash on delivery)', () => {
     await expect(page.getByText(/keep \[ RS\. 1,499 \] ready/)).toBeVisible();
     await expect(page.getByText('GST included')).toBeVisible();
     await expect(page.locator('dd', { hasText: '[ RS. 71.38 ]' }).first()).toBeVisible(); // 5% of Rs 1,499, tax inclusive
-    await expect(page.getByText('CGST / SGST')).toBeVisible();
+    await expect(page.getByText('CGST', { exact: true })).toBeVisible();
+    await expect(page.getByText('SGST', { exact: true })).toBeVisible();
     await expect(page.getByText('Order placed')).toBeVisible();
     await axeClean(page);
 
