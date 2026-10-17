@@ -102,3 +102,14 @@ export const newsletterSubscriber = pgTable(
   },
   (t) => [uniqueIndex('newsletter_email_uq').on(t.email)],
 );
+
+/** Editable store configuration (shipping, COD, seller GST state ...). Values are validated by src/lib/settings.ts. */
+export const storeSetting = pgTable('store_setting', {
+  key: text('key').primaryKey(),
+  value: jsonb('value').notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+  updatedBy: text('updated_by'),
+});

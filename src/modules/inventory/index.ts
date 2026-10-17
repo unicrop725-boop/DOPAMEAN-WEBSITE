@@ -99,3 +99,12 @@ export async function countLowStock(db: DbOrTx): Promise<number> {
 }
 
 export { availableQtySql } from './read-model';
+export {
+  reserveStock,
+  commitReservations,
+  releaseReservations,
+  restockSold,
+  expireDueReservations,
+  listReservations,
+} from './reservations';
+export type { ReserveItem } from './reservations';

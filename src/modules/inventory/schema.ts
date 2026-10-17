@@ -1,6 +1,13 @@
 import { sql } from 'drizzle-orm';
 import { check, index, integer, pgEnum, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
+export const reservationStatus = pgEnum('reservation_status', [
+  'held',
+  'committed',
+  'released',
+  'expired',
+]);
+
 export const movementReason = pgEnum('inventory_movement_reason', [
   'initial',
   'adjustment',
@@ -46,4 +53,25 @@ export const inventoryMovement = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [index('inventory_movement_variant_idx').on(t.variantId, t.createdAt)],
+);
+
+/** Stock held for an unpaid order. Expires (default 15 min) and is released by a worker job (INV-10). */
+export const reservation = pgTable(
+  'reservation',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    /** Weak reference to the order that holds this stock. */
+    refId: uuid('ref_id').notNull(),
+    variantId: uuid('variant_id').notNull(),
+    qty: integer('qty').notNull(),
+    status: reservationStatus('status').notNull().default('held'),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    resolvedAt: timestamp('resolved_at', { withTimezone: true }),
+  },
+  (t) => [
+    index('reservation_due_idx').on(t.status, t.expiresAt),
+    index('reservation_ref_idx').on(t.refId),
+    check('reservation_qty_pos', sql`${t.qty} > 0`),
+  ],
 );

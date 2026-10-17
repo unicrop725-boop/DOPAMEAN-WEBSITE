@@ -43,6 +43,13 @@
       "when": 1792154976434,
       "tag": "0005_newsletter_subscriber",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1792208836521,
+      "tag": "0006_checkout_orders_payments",
+      "breakpoints": true
     }
   ]
 }

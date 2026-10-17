@@ -1,4 +1,4 @@
-import { and, asc, eq, sql, type SQL } from 'drizzle-orm';
+import { and, asc, eq, inArray, sql, type SQL } from 'drizzle-orm';
 import type { DbOrTx } from '@/db/client';
 import { availableQtySql } from '@/modules/inventory';
 import { category, collection, product, productMedia, variant } from './schema';
@@ -389,4 +389,69 @@ export function mediaUrl(key: string, s3PublicBase = process.env.S3_PUBLIC_URL):
   if (key.startsWith('/') || /^https?:\/\//.test(key)) return key;
   const base = (s3PublicBase ?? '').replace(/\/$/, '');
   return `${base}/${key}`;
+}
+
+export type PurchasableVariant = {
+  variantId: string;
+  productId: string;
+  productSlug: string;
+  productName: string;
+  sku: string;
+  optionValues: Record<string, string>;
+  optionLabel: string;
+  pricePaise: number;
+  hsnCode: string | null;
+  taxRuleId: string | null;
+  imageKey: string | null;
+  /** Units that can be sold right now (on hand minus reserved). */
+  available: number;
+};
+
+/**
+ * Everything checkout needs about the variants in a cart, straight from the database.
+ * Variants that are inactive, or whose product is not published, are simply absent from the result.
+ */
+export async function getPurchasableVariants(
+  db: DbOrTx,
+  variantIds: string[],
+): Promise<Map<string, PurchasableVariant>> {
+  const out = new Map<string, PurchasableVariant>();
+  if (variantIds.length === 0) return out;
+  const rows = await db
+    .select({
+      variantId: variant.id,
+      productId: product.id,
+      productSlug: product.slug,
+      productName: product.name,
+      sku: variant.sku,
+      optionValues: variant.optionValues,
+      pricePaise: variant.pricePaise,
+      hsnCode: product.hsnCode,
+      taxRuleId: product.taxRuleId,
+      imageKey: sql<
+        string | null
+      >`(SELECT m.object_key FROM product_media m WHERE m.product_id = ${product.id} ORDER BY m.position, m.id LIMIT 1)`,
+      available: sql<number>`${availableQtySql(sql`${variant.id}`)}`,
+    })
+    .from(variant)
+    .innerJoin(product, eq(product.id, variant.productId))
+    .where(
+      and(
+        inArray(variant.id, variantIds),
+        eq(variant.active, true),
+        eq(product.status, 'published'),
+        sql`${product.deletedAt} IS NULL`,
+      ),
+    );
+  for (const r of rows) {
+    out.set(r.variantId, {
+      ...r,
+      optionLabel: Object.entries(r.optionValues)
+        .map(([k, v]) => `${k}: ${v}`)
+        .join(', '),
+      pricePaise: Number(r.pricePaise),
+      available: Number(r.available),
+    });
+  }
+  return out;
 }

@@ -43,3 +43,13 @@ export function mailerFromEnv(env: NodeJS.ProcessEnv = process.env): Mailer {
     from: env.MAIL_FROM ?? 'DOPAMEAN <no-reply@localhost>',
   });
 }
+
+export {
+  orderPlacedEmail,
+  orderPaidEmail,
+  orderShippedEmail,
+  orderCancelledEmail,
+  orderRefundedEmail,
+  staffAlertEmail,
+} from './domain/order-templates';
+export type { OrderEmailData, OrderEmailLine } from './domain/order-templates';
