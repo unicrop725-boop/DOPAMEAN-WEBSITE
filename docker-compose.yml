@@ -1,0 +1,83 @@
+# Local and production-like stack: web + worker + Postgres + S3 storage + Mailpit.
+# Dev: `docker compose up -d postgres storage mailpit` then run web/worker with npm on the host,
+# or `docker compose up --build` to run everything in containers.
+x-app-env: &app-env
+  NODE_ENV: ${NODE_ENV:-production}
+  APP_URL: ${APP_URL:-http://localhost:3000}
+  LOG_LEVEL: ${LOG_LEVEL:-info}
+  DATABASE_URL: postgres://${POSTGRES_USER:-dopamean}:${POSTGRES_PASSWORD:-dopamean}@postgres:5432/${POSTGRES_DB:-dopamean}
+  BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:?set BETTER_AUTH_SECRET in .env}
+  PRICING_TOKEN_SECRET: ${PRICING_TOKEN_SECRET:?set PRICING_TOKEN_SECRET in .env}
+  S3_ENDPOINT: http://storage:9000
+  S3_REGION: us-east-1
+  S3_BUCKET: ${S3_BUCKET:-dopamean-media}
+  S3_ACCESS_KEY: ${S3_ACCESS_KEY:-minioadmin}
+  S3_SECRET_KEY: ${S3_SECRET_KEY:-minioadmin}
+  SMTP_HOST: mailpit
+  SMTP_PORT: 1025
+  MAIL_FROM: ${MAIL_FROM:-DOPAMEAN <no-reply@localhost>}
+  RAZORPAY_KEY_ID: ${RAZORPAY_KEY_ID:-}
+  RAZORPAY_KEY_SECRET: ${RAZORPAY_KEY_SECRET:-}
+  RAZORPAY_WEBHOOK_SECRET: ${RAZORPAY_WEBHOOK_SECRET:-}
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-dopamean}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-dopamean}
+      POSTGRES_DB: ${POSTGRES_DB:-dopamean}
+    ports: ['5432:5432']
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-dopamean} -d ${POSTGRES_DB:-dopamean}']
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # S3-compatible object storage. The brief names MinIO, but MinIO no longer publishes pullable images
+  # (Docker Hub repo removed, Quay requires auth), so RustFS is used. The app only speaks the S3 API:
+  # swapping back is an image change. See docs/decisions/0003-object-storage.md.
+  storage:
+    image: rustfs/rustfs:latest
+    environment:
+      RUSTFS_ACCESS_KEY: ${S3_ACCESS_KEY:-minioadmin}
+      RUSTFS_SECRET_KEY: ${S3_SECRET_KEY:-minioadmin}
+    ports: ['9000:9000', '9001:9001']
+    volumes: [storagedata:/data]
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports: ['1025:1025', '8025:8025']
+
+  migrate:
+    build: .
+    command: ['node', 'dist/migrate.mjs']
+    environment: *app-env
+    depends_on:
+      postgres: { condition: service_healthy }
+    restart: 'no'
+    profiles: ['app']
+
+  web:
+    build: .
+    command: ['node', '/app/web/server.js']
+    environment: *app-env
+    ports: ['3000:3000']
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+    profiles: ['app']
+
+  worker:
+    build: .
+    command: ['node', 'dist/worker.mjs']
+    environment:
+      <<: *app-env
+      SERVICE_NAME: worker
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+    profiles: ['app']
+
+volumes:
+  pgdata:
+  storagedata:

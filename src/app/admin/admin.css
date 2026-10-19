@@ -1,0 +1,45 @@
+@import 'tailwindcss';
+@import '../../styles/tokens.css';
+
+@font-face {
+  font-family: 'Apercu Pro';
+  src:
+    url('/fonts/apercu_regular_pro.woff2') format('woff2'),
+    url('/fonts/apercu_regular_pro.woff') format('woff');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Apercu Mono Pro';
+  src:
+    url('/fonts/ApercuMonoProRegular.woff2') format('woff2'),
+    url('/fonts/ApercuMonoProRegular.woff') format('woff');
+  font-display: swap;
+}
+
+@theme inline {
+  --color-ink: var(--color-ink);
+  --color-paper: var(--color-paper);
+  --color-panel: var(--color-panel);
+  --color-line: var(--color-line);
+  --color-line-strong: var(--color-line-strong);
+  --color-dark: var(--color-dark);
+  --color-panel-alt: var(--color-panel-alt);
+  --color-muted: var(--color-muted);
+  --color-success: var(--color-success);
+  --color-danger: var(--color-danger);
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-mono);
+  --radius-sm: var(--radius-sm);
+}
+
+body {
+  background: var(--color-panel-alt);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}

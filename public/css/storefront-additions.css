@@ -1,0 +1,10 @@
+/*
+ * Additive rules for states the original design never needed (it only showed in-stock items).
+ * Loaded after the original stylesheets; nothing here changes an existing rule's rendering.
+ */
+.size-btn:disabled,
+.size-selector button:disabled {
+  opacity: 0.35;
+  text-decoration: line-through;
+  cursor: not-allowed;
+}

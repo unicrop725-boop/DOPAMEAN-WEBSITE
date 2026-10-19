@@ -1,0 +1,648 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+@font-face {
+  font-family: 'Apercu Pro';
+  src:
+    url('./apercu_regular_pro.woff2') format('woff2'),
+    url('./apercu_regular_pro.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Apercu Pro';
+  src: url('./apercu_regular_italic_pro.woff') format('woff');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Apercu Pro';
+  src: url('./apercu_medium_pro.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Apercu Mono Pro';
+  src:
+    url('./ApercuMonoProRegular.woff2') format('woff2'),
+    url('./ApercuMonoProRegular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src:
+    url('./Satoshi-Regular.woff2') format('woff2'),
+    url('./Satoshi-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src:
+    url('./Satoshi-Medium.woff2') format('woff2'),
+    url('./Satoshi-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: #ececec;
+}
+
+.scrolling-banner-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1.6vw;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 1001;
+  border-bottom: 1px solid #000;
+}
+
+.scrolling-banner {
+  position: relative;
+  overflow: hidden;
+  flex: 1;
+  height: 100%;
+}
+
+.scrolling-banner div {
+  position: absolute;
+  display: flex;
+  gap: 2.5rem;
+  align-items: center;
+  height: 100%;
+  white-space: nowrap;
+  animation: marquee 15s linear infinite;
+  font:
+    normal normal normal 12px/14px 'Apercu Mono Pro',
+    sans-serif;
+  letter-spacing: 0px;
+  color: #000000;
+  text-transform: uppercase;
+  opacity: 1;
+}
+
+.scrolling-banner span {
+  font-size: clamp(0.6rem, 0.8vw, 1rem);
+  color: black;
+  text-transform: uppercase;
+  padding: 0 0.5rem;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.header-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.2vw;
+}
+
+.header-btn-1,
+.header-btn-2,
+.header-btn-3 {
+  font-family: 'Apercu Mono Pro', monospace;
+  font-size: clamp(0.3rem, 0.8vw, 1rem);
+  font-weight: normal;
+  line-height: 1.2;
+  height: 1.6vw;
+  min-height: 0.9vw;
+  padding: 0 0.8rem;
+  border: none;
+  background: #fff;
+  color: #000000;
+  cursor: pointer;
+  border-left: 1px solid black;
+  text-transform: uppercase;
+  letter-spacing: 0px;
+  opacity: 1;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+/* ============================================= */
+/* ================ side nav style ============= */
+/* ============================================= */
+
+.side-navigation-wrapper {
+  position: fixed;
+  top: 1.6vw;
+  left: 0;
+  width: 11vw;
+  border-right: 1px solid #000;
+  z-index: 1000;
+  background-color: #ececec;
+}
+
+.nav-box-dark {
+  background-color: #000000;
+  border-radius: 0.68vw;
+  padding: 1.4vw;
+  position: absolute;
+  top: 1.5vw;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 9.5vw;
+  letter-spacing: 0px;
+  opacity: 1;
+}
+
+.nav-box-logo-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 0.68vw;
+}
+
+.divider-line-light {
+  border: none;
+  height: 1px;
+  background-color: #ffffff;
+  margin: 0 -1.4vw;
+}
+
+.divider-line-dark {
+  border: none;
+  height: 1px;
+  background-color: #0e0e0e;
+  margin: 0 -1.02vw;
+}
+
+.nav-box-logo-area a {
+  text-decoration: none;
+  display: inline-block;
+}
+
+.nav-box-logo-area img {
+  width: 6.803vw;
+  height: auto;
+  display: block;
+}
+
+.nav-box-links {
+  margin-top: 1.361vw;
+}
+
+.nav-box-links a {
+  font:
+    normal normal normal 13px/16px 'Apercu Mono Pro',
+    monospace;
+  color: #ffffff;
+  text-decoration: none;
+  letter-spacing: 0px;
+  opacity: 1;
+  display: block;
+  margin-bottom: 0.68vw;
+  text-transform: uppercase;
+}
+
+.nav-box-light {
+  background-color: #ffffff;
+  color: #000000;
+  border-radius: 0.68vw;
+  padding: 1.02vw;
+  position: absolute;
+  top: 18.5vw;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 9.5vw;
+}
+
+.nav-box-header-1 {
+  font-family: 'Apercu Mono Pro', monospace;
+  font-size: 1vw;
+  line-height: 1.2;
+  padding-bottom: 0.544vw;
+  text-align: left;
+  letter-spacing: 0px;
+}
+
+.nav-box-user-links {
+  margin-top: 1.02vw;
+}
+
+.nav-box-user-links a {
+  text-decoration: none;
+  color: #000000;
+  display: block;
+  margin-bottom: 0.68vw;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: 0.3s;
+  font:
+    normal normal normal 13px/16px 'Apercu Mono Pro',
+    sans-serif;
+  letter-spacing: 0px;
+  opacity: 1;
+}
+
+/* ============================================= */
+/* ========== product collection style ========= */
+/* ============================================= */
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  background-color: black;
+  border: 0.1px solid black;
+}
+
+.product-item {
+  background-color: #ececec;
+}
+
+.product-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  aspect-ratio: 3 / 4;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.product-info {
+  padding: 0.4rem;
+  border-top: 1px solid #000000;
+  font-size: 0.65rem;
+  line-height: 1rem;
+  font-family: 'Apercu Mono Pro', monospace;
+  color: #000;
+}
+
+/* ============================================= */
+/* =============== Price filter style ========== */
+/* ============================================= */
+
+body {
+  padding-top: 1.6vw;
+}
+
+#time1 {
+  position: fixed;
+  bottom: 1vh;
+  left: 8px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 15px;
+  font-weight: bold;
+  color: #000000;
+  z-index: 0;
+}
+
+.main-content-area {
+  margin-left: 10.9vw;
+  width: calc(100% - 11vw);
+}
+
+.filter-bar {
+  display: flex;
+  justify-content: space-between;
+  border-left: 1px solid #000;
+  font-family: 'Apercu Mono Pro', monospace;
+  text-transform: uppercase;
+  padding: 15px;
+  color: #000;
+}
+
+/* ======================================================= */
+/* ==================== Footer STYLES =================== */
+/* ======================================================= */
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
+  font-family: inherit;
+}
+
+.dpm-mobile-wrapper {
+  display: none;
+  position: relative;
+}
+
+.dpm-desktop-wrapper {
+  display: block;
+}
+
+.dpm-main-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  position: relative;
+  background-image: linear-gradient(rgba(57, 56, 56, 0.585)), url('./assets/footer-img.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.dpm-left-panel {
+  width: 11.1%;
+  height: 100vh;
+  left: 0;
+  border-right: 0.1vw solid #f6f4f4;
+}
+
+.dpm-left-panel-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dpm-contact-widget {
+  background-color: #000000;
+  color: #ffffff;
+  border-radius: 0.68vw;
+  padding: 1.02vw;
+  position: absolute;
+  bottom: 1vw;
+  width: 9.565vw;
+  z-index: 10;
+}
+
+.dpm-contact-widget-title {
+  padding-bottom: 0.544vw;
+  font:
+    normal normal normal 13px/16px 'Apercu Mono Pro',
+    monospace;
+  letter-spacing: 0px;
+  color: #ffffff;
+}
+
+.dpm-widget-divider {
+  border: none;
+  height: 0.1px;
+  background-color: #ffffff;
+  margin: 0 -1.02vw;
+}
+
+.dpm-contact-widget-links {
+  margin-top: 1.02vw;
+  font:
+    normal normal normal 13px/16px 'Apercu Mono Pro',
+    monospace;
+  letter-spacing: 0px;
+  color: #ececec;
+}
+
+.dpm-contact-widget-links p {
+  margin-bottom: 0.544vw;
+}
+
+.dpm-contact-widget-links a {
+  text-decoration: none;
+  cursor: pointer;
+  color: #ffffff;
+}
+
+.dpm-right-panel {
+  width: 89%;
+  display: flex;
+  flex-direction: column;
+}
+
+.dpm-newsletter-section {
+  height: 30%;
+}
+
+.dpm-newsletter-text {
+  max-width: 50vw;
+  position: absolute;
+  right: 37vw;
+  top: 3vh;
+  display: flex;
+  flex-direction: column;
+  gap: 1vw;
+}
+
+.dpm-newsletter-text .dpm-newsletter-title {
+  font-family: 'Apercu Pro', sans-serif;
+  font-size: 1.5vw;
+  font-weight: bold;
+  line-height: 1.2;
+  letter-spacing: 0px;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+.dpm-newsletter-text .dpm-newsletter-description {
+  font:
+    normal normal normal 10px/12px 'Apercu Mono Pro',
+    monospace;
+  letter-spacing: 0px;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+.dpm-newsletter-form-wrapper {
+  position: absolute;
+  top: 15vh;
+  right: 37vw;
+}
+
+.dpm-newsletter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1vw;
+}
+
+.dpm-newsletter-form .dpm-form-row {
+  display: flex;
+  gap: 1vw;
+}
+
+.dpm-newsletter-form input {
+  flex: 1;
+  padding: 0.6vw 1vw;
+  font-size: 0.9vw;
+  border: 0.1vw solid #ccc;
+  background: transparent;
+  color: #fff;
+  transition:
+    border 0.3s,
+    background-color 0.3s;
+}
+
+.dpm-newsletter-form input::placeholder {
+  color: #ddd;
+}
+
+.dpm-newsletter-form input:focus {
+  border-color: #fff;
+  outline: none;
+}
+
+.dpm-newsletter-form input[type='submit'] {
+  background-color: #000000;
+  color: rgb(255, 255, 255);
+  border: none;
+  cursor: pointer;
+}
+
+.dpm-newsletter-form input[type='submit']:hover {
+  background-color: #ccc;
+}
+
+.dpm-perks-section {
+  font-family: 'Apercu Mono Pro', monospace;
+  font-size: 15px;
+  line-height: 18px;
+  color: #ffffff;
+  text-transform: uppercase;
+  height: 10%;
+}
+
+.dpm-perks-bar {
+  display: flex;
+  justify-content: center;
+  height: 10vh;
+  text-align: center;
+  border-bottom: 0.1vw solid white;
+  border-top: 0.1vw solid white;
+}
+
+.dpm-perk-item-1,
+.dpm-perk-item-2 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+}
+
+.dpm-perk-item-1 {
+  border-right: 0.1vw solid white;
+  color: #ececec;
+}
+
+.dpm-main-links-section {
+  height: 50%;
+  padding: 1rem 0;
+}
+
+.dpm-main-links-grid {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.dpm-main-links-logo {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dpm-main-links-logo img {
+  width: 150px;
+  filter: brightness(0) invert(1);
+}
+
+.dpm-main-links-columns {
+  flex: 2;
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto 1fr;
+  gap: 1vw 6vw;
+  padding-top: 1vw;
+  color: #f6f4f4;
+}
+
+.dpm-links-title-1,
+.dpm-links-title-2 {
+  font-family: 'Apercu Pro', sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+.dpm-links-list-1,
+.dpm-links-list-2 {
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  font:
+    normal normal normal 15px/40px 'Apercu Mono Pro',
+    monospace;
+  letter-spacing: 0px;
+  color: #ffffff;
+  text-transform: uppercase;
+  opacity: 0.92;
+}
+
+.dpm-links-list-1 {
+  grid-column: 1;
+}
+
+.dpm-links-list-2 {
+  grid-column: 2;
+}
+
+.dpm-legal-section {
+  position: absolute;
+  bottom: 0;
+  left: 11.1%;
+  width: 88.9%;
+  height: 10%;
+}
+
+.dpm-legal-bar {
+  display: flex;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  border-top: 0.1vw solid white;
+  color: white;
+  font-family: 'Apercu Mono Pro', monospace;
+  font-size: 0.8vw;
+}
+
+.dpm-legal-bar > div {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 5vw;
+}
+
+.dpm-legal-item-1,
+.dpm-legal-item-2 {
+  border-right: 0.1vw solid white;
+}

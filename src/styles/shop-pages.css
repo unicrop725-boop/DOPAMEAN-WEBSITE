@@ -1,0 +1,306 @@
+@import './tokens.css';
+
+/*
+ * Styles for storefront screens that did not exist in the original static design (account, auth,
+ * search, content pages ...). They reuse the original look: grey page, hard black rules, small
+ * monospace capitals, black/white boxes. All classes are prefixed `sp-` so they cannot collide with
+ * the original CSS, which is not modified (ADR 0001 / 0004).
+ */
+.sp-page {
+  --sp-mono: 'Apercu Mono Pro', ui-monospace, 'Courier New', monospace;
+  min-height: 60vh;
+  border-left: 1px solid var(--color-ink);
+  border-top: 1px solid var(--color-ink);
+  padding: 24px 15px 48px;
+  font-family: var(--sp-mono);
+  color: var(--color-ink);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+.sp-page * {
+  box-sizing: border-box;
+}
+.sp-narrow {
+  max-width: 440px;
+}
+.sp-medium {
+  max-width: 760px;
+}
+.sp-title {
+  font-size: 1rem;
+  font-weight: 400;
+  margin: 0 0 20px;
+  letter-spacing: 0.02em;
+}
+.sp-subtitle {
+  font-size: 0.75rem;
+  font-weight: 400;
+  margin: 28px 0 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-ink);
+}
+.sp-text {
+  text-transform: none;
+  font-size: 0.8rem;
+  line-height: 1.7;
+  max-width: 68ch;
+  margin: 0 0 14px;
+}
+.sp-muted {
+  color: var(--color-muted-text);
+}
+.sp-link {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.sp-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.sp-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.sp-field label,
+.sp-label {
+  font-size: 0.7rem;
+}
+.sp-input,
+.sp-select {
+  width: 100%;
+  height: 40px;
+  padding: 0 10px;
+  border: 1px solid var(--color-ink);
+  border-radius: 0;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font: inherit;
+  font-size: 0.8rem;
+  text-transform: none;
+}
+.sp-input:focus-visible,
+.sp-select:focus-visible,
+.sp-btn:focus-visible,
+.sp-page a:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}
+.sp-field-hint {
+  text-transform: none;
+  color: var(--color-muted-text);
+  font-size: 0.7rem;
+}
+.sp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0 18px;
+  border: 1px solid var(--color-ink);
+  border-radius: 0;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font: inherit;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.sp-btn:hover {
+  background: var(--color-dark);
+}
+.sp-btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.sp-btn--outline {
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+.sp-btn--outline:hover {
+  background: var(--color-panel-alt);
+}
+.sp-btn--danger {
+  background: var(--color-danger);
+  border-color: var(--color-danger);
+}
+.sp-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.sp-message {
+  border: 1px solid var(--color-ink);
+  background: var(--color-paper);
+  padding: 10px 12px;
+  text-transform: none;
+  font-size: 0.8rem;
+  margin: 0 0 16px;
+}
+.sp-message--error {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+.sp-message--success {
+  border-color: var(--color-success);
+}
+.sp-box {
+  border: 1px solid var(--color-ink);
+  background: var(--color-paper);
+  padding: 14px;
+}
+.sp-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--color-ink);
+  border: 1px solid var(--color-ink);
+}
+.sp-grid-2 > * {
+  background: var(--color-panel);
+  padding: 14px;
+}
+.sp-subnav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin: 0 0 22px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--color-ink);
+}
+.sp-subnav a[aria-current='page'] {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.sp-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+.sp-list > li {
+  border: 1px solid var(--color-ink);
+  background: var(--color-paper);
+  padding: 12px 14px;
+  text-transform: none;
+  font-size: 0.8rem;
+}
+.sp-address-name {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  margin-bottom: 4px;
+}
+.sp-badge {
+  display: inline-block;
+  border: 1px solid var(--color-ink);
+  padding: 0 6px;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  margin-left: 8px;
+}
+.sp-pagination {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  padding: 18px 0;
+  border-left: 1px solid var(--color-ink);
+  border-top: 1px solid var(--color-ink);
+  font-family: var(--sp-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+.sp-pagination [aria-disabled='true'] {
+  color: var(--color-muted-text);
+}
+.sp-empty {
+  border: 1px dashed var(--color-ink);
+  padding: 28px 14px;
+  text-align: center;
+}
+.sp-prose h2 {
+  font-size: 0.8rem;
+  font-weight: 400;
+  margin: 24px 0 8px;
+}
+.sp-searchbar {
+  display: flex;
+  gap: 10px;
+  margin: 0 0 20px;
+}
+.sp-searchbar .sp-input {
+  flex: 1;
+}
+.sp-result-count {
+  margin: 0 0 14px;
+  color: var(--color-muted-text);
+}
+.sp-skip {
+  position: absolute;
+  left: -9999px;
+}
+.sp-skip:focus {
+  left: 8px;
+  top: 8px;
+  z-index: 3000;
+  background: var(--color-paper);
+  padding: 8px;
+}
+
+/* Filter / sort panels opened from the original FILTER and SORTED BY labels */
+.sp-panel {
+  display: none;
+  border-left: 1px solid var(--color-ink);
+  border-top: 1px solid var(--color-ink);
+  padding: 14px 15px;
+  background: var(--color-panel-alt);
+  font-family: var(--sp-mono, monospace);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+}
+.sp-panel.is-open {
+  display: block;
+}
+.sp-panel form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: flex-end;
+}
+.sp-panel .sp-field {
+  min-width: 140px;
+}
+.sp-sort-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.sp-sort-list a[aria-current='true'] {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.filter-bar > span[role='button'] {
+  cursor: pointer;
+}
+.sp-size-btn[disabled] {
+  opacity: 0.35;
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .sp-page {
+    padding: 18px 12px 40px;
+    border-left: 0;
+  }
+  .sp-grid-2 {
+    grid-template-columns: 1fr;
+  }
+  .sp-panel,
+  .sp-pagination {
+    border-left: 0;
+  }
+}

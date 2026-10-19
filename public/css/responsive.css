@@ -1,0 +1,723 @@
+@font-face {
+  font-family: 'Apercu Pro';
+  src:
+    url('./apercu_regular_pro.woff2') format('woff2'),
+    url('./apercu_regular_pro.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Apercu Pro';
+  src: url('./apercu_regular_italic_pro.woff') format('woff');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Apercu Pro';
+  src: url('./apercu_medium_pro.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+}
+
+/* Apercu Mono Pro Family */
+@font-face {
+  font-family: 'Apercu Mono Pro';
+  src:
+    url('./ApercuMonoProRegular.woff2') format('woff2'),
+    url('./ApercuMonoProRegular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Satoshi Family */
+@font-face {
+  font-family: 'Satoshi';
+  src:
+    url('./Satoshi-Regular.woff2') format('woff2'),
+    url('./Satoshi-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src:
+    url('./Satoshi-Medium.woff2') format('woff2'),
+    url('./Satoshi-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+}
+
+/* ======================================================= */
+/* ================= Header resopnsive ================== */
+/* ======================================================= */
+
+@media (max-width: 768px) {
+  .desktop-view {
+    display: none !important;
+  }
+
+  .mobile {
+    display: block !important;
+  }
+
+  .main-banner-mobile-background {
+    width: 100%;
+    height: 100vh;
+    background-image: url('./assets/Group\ 17.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: scroll;
+  }
+
+  .mobile-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .top-nav-mobile {
+    display: flex;
+    align-items: stretch;
+    background-color: #000;
+    color: #fff;
+    height: 6vh;
+  }
+
+  .nav-section {
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    border-right: 1px solid #ffffff;
+  }
+
+  .mobile-logo-img {
+    width: 70px;
+    height: auto;
+  }
+
+  .search-container {
+    flex-grow: 1;
+    color: #ffffff;
+    font-size: 0.6rem;
+  }
+
+  .controls-container {
+    gap: 1rem;
+    border-right: none;
+  }
+
+  .bag-link {
+    font-size: 0.6rem;
+  }
+
+  .hamburger-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 22px;
+    height: 2vh;
+    cursor: pointer;
+  }
+
+  .hamburger-menu .line {
+    width: 100%;
+    height: 2px;
+    background-color: #fff;
+  }
+
+  .sub-nav-mobile {
+    display: flex;
+    align-items: stretch;
+    background-color: #fff;
+    color: #000;
+    font-size: 0.7rem;
+    height: 4vh;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .marquee-container {
+    flex-grow: 1;
+    overflow: hidden;
+    display: flex;
+  }
+
+  .marquee-content {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    animation: marquee-mobile 15s linear infinite;
+  }
+
+  .marquee-content span {
+    padding: 0 1rem;
+  }
+
+  @keyframes marquee-mobile {
+    0% {
+      transform: translateX(0%);
+    }
+
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.1rem;
+    padding: 0px 4px;
+    border-left: 1px solid #000000;
+    flex-shrink: 0;
+  }
+
+  .toggle-switch {
+    width: 34px;
+    height: 18px;
+    background-color: #000;
+    border-radius: 9px;
+    padding: 2px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+
+  .toggle-circle {
+    width: 14px;
+    height: 14px;
+    background-color: #fff;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+  }
+
+  .mobile-content-wrapper {
+    padding-top: 10vh;
+    /* Space for the fixed header */
+  }
+}
+
+/* ------------   same for image scroll 1  ---------------  */
+@media (max-width: 768px) {
+  .content-section-1 {
+    height: 100vh;
+  }
+
+  .section-sidebar-1 {
+    display: none;
+  }
+
+  .section-main-content-1 {
+    width: 100%;
+    height: 100vh;
+  }
+
+  .section-header-1 {
+    height: 60px;
+    padding: 0 15px;
+    border-bottom: 1px solid #000;
+  }
+
+  .section-header-1 a {
+    font-size: 12px;
+  }
+
+  .product-scroll-container {
+    flex-direction: row;
+
+    overflow-x: auto;
+
+    overflow-y: hidden;
+    height: calc(100vh - 60px);
+  }
+
+  .product-card {
+    width: 85vw;
+    min-width: 100vw;
+    height: 100%;
+    border-right: 1px solid #000;
+    /* border-bottom: 1px solid #000; */
+  }
+
+  .product-price-info {
+    padding: 0 15px;
+  }
+
+  .product-card-name,
+  .product-card-price {
+    font-size: 14px;
+  }
+}
+
+/* ======================================================= */
+/* ==============  image scroll responsive1  ============= */
+/* ======================================================= */
+
+@media (min-width: 768px) {
+  .desktop-view {
+    display: flex;
+    align-items: center;
+    text-decoration: underline;
+  }
+
+  .section-main-content {
+    flex: 1;
+    width: auto;
+    border-bottom: 1px solid #000;
+    background-color: black;
+    z-index: 10;
+  }
+
+  .collection-grid {
+    flex-direction: row;
+  }
+
+  .collection-item {
+    width: 50%;
+    height: 100vh;
+    border-right: 1px solid #000;
+    border-bottom: none;
+    padding: 10px;
+    background-color: #ececec;
+  }
+
+  .collection-item:last-child {
+    border-right: none;
+  }
+
+  .collection-overlay {
+    left: 3%;
+    right: 3%;
+    width: auto;
+    bottom: 5%;
+  }
+}
+
+/* ======================================================= */
+/* ================  image scroll responsive2  ============= */
+/* ======================================================= */
+
+@media (max-width: 768px) {
+  .showcase-container {
+    flex-direction: column;
+    height: auto;
+    overflow: visible;
+  }
+
+  .showcase-sidebar {
+    display: none;
+  }
+
+  .showcase-main {
+    width: 100%;
+    height: auto;
+  }
+
+  .page-header {
+    height: 60px;
+    padding: 0 15px;
+    /* border-bottom: 1px solid #000; */
+  }
+
+  .header-link {
+    font-size: 16px;
+  }
+
+  .item-grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background-color: #000000a1;
+    overflow: visible;
+    height: auto;
+    width: 100%;
+    /* border-top: 1px solid #000; */
+  }
+
+  .item-card {
+    min-width: 0;
+    width: 100%;
+    height: auto;
+    border-right: none;
+  }
+
+  .item-card img {
+    height: auto;
+    aspect-ratio: 4 / 5;
+    padding: 10px;
+  }
+
+  .item-info {
+    height: auto;
+    min-height: 60px;
+    padding: 4px 7px;
+    /* border-top: 1px solid #000; */
+    /* border-bottom: 1px solid #000; */
+  }
+
+  .item-name,
+  .item-price {
+    font-size: 11px;
+  }
+
+  .shop-now-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    border-top: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+    background-color: #e4e4e4;
+    /* border-bottom: 1px solid black; */
+    padding: 20px 0;
+  }
+
+  .inner-design {
+    background-color: #ffffff;
+    padding: 15px 36vw;
+    text-align: center;
+  }
+
+  .shop-now-bar a {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 14px;
+    color: #000;
+    text-decoration: none;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+}
+
+/* ======================================================= */
+/* ================ collection responsive css  ============= */
+/* ======================================================= */
+
+@media (max-width: 767px) {
+  .section-sidebar {
+    display: none;
+  }
+
+  .main-content,
+  .section-main-content {
+    width: 100%;
+    padding: 0;
+  }
+
+  .notification-text {
+    font-size: 11px;
+    height: 40px;
+  }
+
+  .collection-item {
+    height: 85vh;
+    border-bottom: 1px solid #000;
+    padding: 10px;
+  }
+
+  .collection-item img {
+    padding: 0;
+  }
+
+  .collection-overlay {
+    width: 100%;
+    box-sizing: border-box;
+    bottom: 0;
+    padding: 1.5rem;
+  }
+
+  .collection-title {
+    font-size: 1rem;
+  }
+}
+
+/* ======================================================= */
+/* ================  video responsive css  ============= */
+/* ======================================================= */
+
+@media (max-width: 767px) {
+  .desktop-view.section-sidebar-1 {
+    display: none;
+  }
+
+  .video-section-content {
+    width: 100%;
+    padding: 0;
+  }
+}
+
+/* ======================================================= */
+/* ================  footer responsive css  ============= */
+/* ======================================================= */
+
+:root {
+  --font-mono: 'Apercu Mono Pro', monospace;
+  --font-main: 'Satoshi', sans-serif;
+}
+
+body {
+  color: #ffffff;
+  line-height: 1.6;
+  background-color: #000;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
+  font-family: inherit;
+}
+
+@media (max-width: 768px) {
+  .dpm-desktop-wrapper {
+    display: none;
+  }
+
+  .dpm-mobile-wrapper {
+    display: block;
+  }
+
+  .dpm-mobile-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    background-image:
+      linear-gradient(rgba(26, 26, 26, 0.85), rgba(26, 26, 26, 0.95)),
+      url('./assets/footer-img.png');
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    position: relative;
+  }
+
+  .dpm-mobile-logo-wrapper {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding-top: 5rem;
+  }
+
+  .dpm-mobile-perks-wrapper {
+    text-align: center;
+    font-size: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .dpm-mobile-perk {
+    padding: 0.5rem 0;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .dpm-mobile-perk-highlight {
+    color: #22c55e;
+    margin-bottom: 0.5rem;
+    font-family: 'Source Code Pro', monospace;
+  }
+
+  .dpm-mobile-shipping-bar {
+    border-top: 1px solid #888;
+    border-bottom: 1px solid #888;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .dpm-mobile-shipping-content {
+    background-color: rgba(85, 85, 85, 0.7);
+    padding: 20px 10vw;
+  }
+
+  .dpm-mobile-shipping-content p {
+    color: #e0e0e0;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  .dpm-mobile-accordion {
+    font-size: 0.875rem;
+    flex-grow: 1;
+  }
+
+  .dpm-accordion-item {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .dpm-accordion-item:first-of-type {
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .dpm-accordion-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    text-align: left;
+    padding: 1rem;
+    background: none;
+    border: none;
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    /* cursor: pointer; */
+  }
+
+  .dpm-accordion-title {
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-family: 'Source Code Pro', monospace;
+  }
+
+  .dpm-accordion-description {
+    margin-top: 0.5rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.75rem;
+    padding-right: 1rem;
+    text-transform: uppercase;
+    line-height: 1.5;
+    font-family: 'Source Code Pro', monospace;
+  }
+
+  /* --- KEY CHANGE: Removed conflicting transition --- */
+  .dpm-accordion-content {
+    overflow: hidden;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.75rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    font-family: 'Source Code Pro', monospace;
+  }
+
+  .dpm-accordion-content a {
+    display: block;
+    margin-top: 0.5rem;
+    transition: color 0.3s;
+    padding-bottom: 10px;
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+  }
+
+  .dpm-accordion-content a:hover {
+    color: #22c55e;
+  }
+
+  .dpm-mobile-socials {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    text-transform: uppercase;
+    flex-wrap: wrap;
+    font-family: 'Source Code Pro', monospace;
+  }
+
+  .dpm-mobile-socials a {
+    transition: color 0.2s;
+    padding: 0.5rem;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .dpm-mobile-socials a:hover {
+    color: #22c55e;
+  }
+
+  .dpm-mobile-legal-bar {
+    display: flex;
+    font-size: 0.5rem;
+    letter-spacing: 0.05em;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    align-items: stretch;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    font-family: 'Source Code Pro', monospace;
+  }
+
+  .dpm-mobile-legal-left {
+    width: 66.66%;
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1rem;
+  }
+
+  .dpm-mobile-legal-left p,
+  .dpm-mobile-legal-right p {
+    margin: 0;
+    padding: 5px 0;
+  }
+
+  .dpm-mobile-legal-right {
+    width: 33.33%;
+    padding: 0.5rem 0.9rem;
+    /* text-align: right; */
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  /* --- Styles for Smooth Accordion Icon --- */
+
+  /* This rule was removed because JS now handles the open state */
+  /* .dpm-accordion-item.is-open .dpm-accordion-content { ... } */
+
+  .dpm-accordion-icon {
+    position: relative;
+    width: 1.1rem;
+    height: 1.1rem;
+    min-width: 1.1rem;
+    margin-left: 1rem;
+    font-size: 0;
+  }
+
+  .dpm-accordion-icon::before,
+  .dpm-accordion-icon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 2px;
+    background-color: #fff;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dpm-accordion-icon::before {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  .dpm-accordion-icon::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+
+  .dpm-accordion-item.is-open .dpm-accordion-icon::before {
+    transform: translate(-50%, -50%) rotate(180deg);
+  }
+
+  .dpm-accordion-item.is-open .dpm-accordion-icon::after {
+    transform: translate(-50%, -50%) rotate(180deg);
+  }
+}

@@ -1,0 +1,10 @@
+legacy
+.next
+node_modules
+drizzle/meta
+package-lock.json
+playwright-report
+test-results
+tests/e2e/__screenshots__
+coverage
+.vscode

@@ -1,0 +1,58 @@
+/*
+ * Design tokens: the single place for type scale, spacing, colour, radius and shadow (brief §10).
+ * Values are extracted from the original storefront CSS (legacy/css/*.css) so new screens and the
+ * admin look native to it. The storefront's own CSS files are NOT changed and do not read these.
+ */
+:root {
+  /* colour (from the original palette) */
+  --color-ink: #000000;
+  --color-paper: #ffffff;
+  --color-panel: #ececec;
+  --color-panel-alt: #f6f4f4;
+  --color-line: #e0e0e0;
+  --color-line-strong: #cccccc;
+  --color-muted: #888888;
+  /* Muted TEXT on the grey page must reach 4.5:1 (#595959 on #ececec is about 5.9:1). */
+  --color-muted-text: #595959;
+  --color-dark: #3a3a3a;
+  --color-success: #22c55e;
+  --color-danger: #c0392b;
+  --color-warning: #b7791f;
+
+  /* type: families as declared by the original site */
+  --font-body: 'Apercu Pro', 'Satoshi', system-ui, sans-serif;
+  --font-mono: 'Apercu Mono Pro', ui-monospace, 'Courier New', monospace;
+
+  /* type scale (rem) */
+  --text-xs: 0.75rem;
+  --text-sm: 0.8rem;
+  --text-base: 0.9rem;
+  --text-md: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+
+  /* spacing scale (px) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+
+  /* the original design is hard-edged */
+  --radius-none: 0;
+  --radius-sm: 2px;
+  --shadow-none: none;
+  --shadow-pop: 0 4px 16px rgba(0, 0, 0, 0.12);
+
+  /* motion: nothing decorative; honours reduced motion */
+  --motion-fast: 120ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-fast: 0ms;
+  }
+}
